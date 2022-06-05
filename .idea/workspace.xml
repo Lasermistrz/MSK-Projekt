@@ -1,14 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="d909859d-a9b8-483a-a0d4-fd471959c748" name="Changes" comment="" />
+    <list default="true" id="d909859d-a9b8-483a-a0d4-fd471959c748" name="Changes" comment="Init">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/portico.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/portico.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/msk.fed" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/GUI/GUIAmbassador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/GUI/GUIFederate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Gabinet/GabinetAmbassador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Gabinet/GabinetFederate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Lekarz/LekarzAmbassador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Lekarz/LekarzFederate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/MainFederate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/MainFederateAmbassador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Pacjent/PacjentAmbassador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Pacjent/PacjentFederate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Poczekalnia/PoczekalniaAmbassador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Poczekalnia/PoczekalniaFederate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Rejestracja/RefestracjaAmbassador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Rejestracja/RejestracjaFederate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Statystyka/StatystykaAmbassador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Statystyka/StatystykaFederate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSK-Projekt.iml" beforeDir="false" afterPath="$PROJECT_DIR$/MSK-Projekt.iml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="2A9w3dJdP1LJ34ZxoC394wsPua8" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -17,9 +58,43 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false"
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "jdk.selected.JAVA_MODULE": "openjdk-18",
+    "last_opened_file_path": "D:/IdeaProjects/Symulacje/MSK-Projekt/lib/portico.jar",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\IdeaProjects\Symulacje\MSK-Projekt\lib" />
+      <recent name="D:\IdeaProjects\Symulacje\MSK-Projekt" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\IdeaProjects\Symulacje\MSK-Projekt\lib" />
+      <recent name="D:\IdeaProjects\Symulacje\MSK-Projekt" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="MainFederate" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="MainFederate" />
+      <module name="MSK-Projekt" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MainFederate" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -28,8 +103,22 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1654434912332</updated>
+      <workItem from="1654434913728" duration="46000" />
+      <workItem from="1654435001066" duration="1353000" />
+      <workItem from="1654436385180" duration="3605000" />
     </task>
+    <task id="LOCAL-00001" summary="Init">
+      <created>1654434945314</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1654434945314</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -41,5 +130,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Init" />
+    <option name="LAST_COMMIT_MESSAGE" value="Init" />
   </component>
 </project>

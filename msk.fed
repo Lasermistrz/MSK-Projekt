@@ -1,0 +1,52 @@
+(FED
+  (Federation Przychodnia)
+  (FEDversion v1.3)
+  (spaces
+    (space TestSpace
+      (dimension TestDimension)
+    )
+    (space OtherSpace
+      (dimension OtherDimension)
+    )
+  )
+  (objects 
+    (class ObjectRoot 
+      (attribute privilegeToDelete reliable timestamp)
+	 (class RTIprivate)
+      (class Rejestracja
+        (attribute lista reliable timestamp TestSpace)
+      )
+	 (class Pacjent
+        (attribute id_pacjenta reliable timestamp TestSpace)
+        (attribute miejsce reliable timestamp TestSpace)
+      )
+	 (class Gabinet
+        (attribute lista reliable timestamp TestSpace)
+      )
+	 (class Poczekalnia
+        (attribute lista reliable timestamp TestSpace)
+        (attribute ilosc_miejsc reliable timestamp TestSpace)
+        (attribute lista_dostepnych_lekarzy reliable timestamp TestSpace)
+      )
+    )
+  )
+  (interactions 
+    (class InteractionRoot reliable timestamp
+	(class RTIprivate reliable timestamp)
+      (class Czy_otwarte reliable timestamp TestSpace       
+      )
+      (class Przeniesienie_pacjenta reliable timestamp TestSpace 
+	   (parameter id_pacjenta)      
+	   (parameter miejsce_koncowe)
+      )
+      (class Wejscie_do_lekarza reliable timestamp TestSpace
+	   (parameter id_pacjenta)
+	   (parameter godzina_wejscia_do_lekarza)
+      )
+      (class Wejscie_do_przychodni reliable timestamp TestSpace     
+	   (parameter id_pacjenta)  
+	   (parameter godzina_wejscia)
+      ) 
+    )
+  )
+)
