@@ -1,4 +1,4 @@
-package Lekarz;
+package MSK.Lekarz;
 
 public class LekarzAmbassador {
 }

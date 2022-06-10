@@ -1,3 +1,5 @@
+package MSK;
+
 import hla.rti.*;
 import hla.rti.jlc.RtiFactoryFactory;
 import org.portico.impl.hla13.types.DoubleTime;
@@ -11,6 +13,7 @@ import java.net.MalformedURLException;
 public class MainFederate {
     public static final int ITERATIONS = 200;
     public static final String READY_TO_RUN = "ReadyToRun";
+    private int prevNumber=0;
 
     private RTIambassador rtiamb;
     private MainFederateAmbassador fedamb;
@@ -92,8 +95,8 @@ public class MainFederate {
         enableTimePolicy();
         log( "Time Policy Enabled" );
 
-        /*publishAndSubscribe();
-        log( "Published and Subscribed" );*/
+        publishAndSubscribe();
+        log( "Published and Subscribed" );
 
         /*int objectHandle = registerObject();
         log( "Registered Object, handle=" + objectHandle );*/
@@ -106,6 +109,11 @@ public class MainFederate {
 
             // 9.2 send an interaction
             //sendInteraction();
+
+            if(fedamb.sumNumberReceived!=prevNumber){
+                log("Received new sum number " + fedamb.sumNumberReceived);
+                prevNumber= fedamb.sumNumberReceived;
+            }
 
             // 9.3 request a time advance and wait until we get it
             advanceTime( 1.0 );
@@ -135,6 +143,11 @@ public class MainFederate {
         {
             log( "Didn't destroy federation, federates still joined" );
         }
+    }
+
+    private void publishAndSubscribe() throws RTIexception {
+        int getProductHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Czy_otwarte" );
+        rtiamb.subscribeInteractionClass( getProductHandle );
     }
 
     private void enableTimePolicy() throws RTIexception
@@ -170,6 +183,21 @@ public class MainFederate {
         {
             rtiamb.tick();
         }
+    }
+
+    private void deleteObject( int handle ) throws RTIexception
+    {
+        rtiamb.deleteObjectInstance( handle, generateTag() );
+    }
+
+    private double getLbts()
+    {
+        return fedamb.federateTime + fedamb.federateLookahead;
+    }
+
+    private byte[] generateTag()
+    {
+        return (""+System.currentTimeMillis()).getBytes();
     }
 
     public static void main( String[] args )

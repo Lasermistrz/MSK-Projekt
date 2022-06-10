@@ -1,4 +1,4 @@
-package GUI;
+package MSK.GUI;
 
 public class GUIFederate {
 }

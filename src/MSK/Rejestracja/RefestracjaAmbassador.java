@@ -1,4 +1,4 @@
-package Rejestracja;
+package MSK.Rejestracja;
 
 public class RefestracjaAmbassador {
 }

@@ -33,7 +33,8 @@
   (interactions 
     (class InteractionRoot reliable timestamp
 	(class RTIprivate reliable timestamp)
-      (class Czy_otwarte reliable timestamp TestSpace       
+      (class Czy_otwarte reliable timestamp TestSpace
+        (parameter Czy_otwarte)
       )
       (class Przeniesienie_pacjenta reliable timestamp TestSpace 
 	   (parameter id_pacjenta)      

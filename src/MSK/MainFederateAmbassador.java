@@ -1,7 +1,11 @@
+package MSK;
+
 import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
 import hla.rti1516.jlc.NullFederateAmbassador;
 import org.portico.impl.hla13.types.DoubleTime;
+
+import java.util.ArrayList;
 
 public class MainFederateAmbassador extends NullFederateAmbassador implements FederateAmbassador  {
     protected double federateTime        = 0.0;
@@ -16,6 +20,7 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
 
     protected boolean running 			 = true;
     protected int finishHandle;
+    protected int sumNumberReceived;
 
     public MainFederateAmbassador(){}
 

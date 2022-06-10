@@ -1,4 +1,4 @@
-package Gabinet;
+package MSK.Gabinet;
 
 public class GabinetFederate {
 }

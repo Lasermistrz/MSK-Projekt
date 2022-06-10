@@ -1,4 +1,4 @@
-package Gabinet;
+package MSK.Gabinet;
 
 import hla.rti1516.jlc.NullFederateAmbassador;
 
