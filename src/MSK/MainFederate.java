@@ -13,7 +13,7 @@ import java.net.MalformedURLException;
 public class MainFederate {
     public static final int ITERATIONS = 200;
     public static final String READY_TO_RUN = "ReadyToRun";
-    private int prevNumber=0;
+    private final double timeStep = 1.0;
 
     private RTIambassador rtiamb;
     private MainFederateAmbassador fedamb;
@@ -101,8 +101,8 @@ public class MainFederate {
         /*int objectHandle = registerObject();
         log( "Registered Object, handle=" + objectHandle );*/
 
-        		for( int i = 0; i < ITERATIONS; i++ )
-        //while(fedamb.running)
+        //		for( int i = 0; i < ITERATIONS; i++ )
+        while(fedamb.running)
         {
             // 9.1 update the attribute values of the instance //
             //updateAttributeValues( objectHandle );
@@ -110,13 +110,10 @@ public class MainFederate {
             // 9.2 send an interaction
             //sendInteraction();
 
-            if(fedamb.sumNumberReceived!=prevNumber){
-                log("Received new sum number " + fedamb.sumNumberReceived);
-                prevNumber= fedamb.sumNumberReceived;
-            }
 
             // 9.3 request a time advance and wait until we get it
-            advanceTime( 1.0 );
+            double timeToAdvance = fedamb.federateTime + timeStep;
+            advanceTime(timeToAdvance);
             log( "Time Advanced to " + fedamb.federateTime );
 
             rtiamb.tick();
@@ -170,15 +167,11 @@ public class MainFederate {
             rtiamb.tick();
         }
     }
-    private void advanceTime( double timestep ) throws RTIexception
-    {
-        // request the advance
+    private void advanceTime( double timeToAdvance ) throws RTIexception {
         fedamb.isAdvancing = true;
-        LogicalTime newTime = convertTime( fedamb.federateTime + timestep );
+        LogicalTime newTime = convertTime( timeToAdvance );
         rtiamb.timeAdvanceRequest( newTime );
 
-        // wait for the time advance to be granted. ticking will tell the
-        // LRC to start delivering callbacks to the federate
         while( fedamb.isAdvancing )
         {
             rtiamb.tick();

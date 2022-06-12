@@ -12,11 +12,23 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Random;
 
 public class PacjentFederate {
     public static final String READY_TO_RUN = "ReadyToRun";
+    public static int idstatic=0;
+    private int[] pacjentHlaHandle = new int[50000];
+    /***
+     * @value
+     * 0 = rejetracja
+     * 1 = poczekalnia
+     * 2 = lekarz
+     * 3 = gabinet
+     */
+    private int miejsce;
+
 
     private RTIambassador rtiamb;
     private PacjentAmbassador fedamb;
@@ -69,10 +81,44 @@ public class PacjentFederate {
 
         while (fedamb.running) {
             advanceTime(randomTime());
-            sendInteraction(fedamb.federateTime + fedamb.federateLookahead);
+            registerPacjentObject(fedamb.federateTime + fedamb.federateLookahead);
+            //updateHLAObject(fedamb.federateTime + fedamb.federateLookahead);
+            //sendInteraction(fedamb.federateTime + fedamb.federateLookahead);
             rtiamb.tick();
         }
 
+    }
+
+    private void registerPacjentObject(double time) throws RTIexception {
+        int classHandleCreate = rtiamb.getObjectClassHandle("ObjectRoot.Pacjent");
+        this.pacjentHlaHandle[idstatic] = rtiamb.registerObjectInstance(classHandleCreate);
+
+
+        SuppliedAttributes attributes = RtiFactoryFactory.getRtiFactory().createSuppliedAttributes();
+        int classHandle = rtiamb.getObjectClass(pacjentHlaHandle[idstatic]);
+        int idHandle = rtiamb.getAttributeHandle( "id_pacjenta", classHandle );
+        byte[] idValue = ByteBuffer.allocate(4).putInt(idstatic).array();
+
+        attributes.add(idHandle, idValue);
+        LogicalTime logicalTime = convertTime( time );
+        rtiamb.updateAttributeValues( pacjentHlaHandle[idstatic], attributes, "actualize pacjent".getBytes(), logicalTime );
+        log("Przybył pacjent nr " + ByteBuffer.wrap(idValue).getInt());
+        idstatic++;
+    }
+
+    private void updateHLAObject(double time) throws RTIexception{
+        SuppliedAttributes attributes =
+                RtiFactoryFactory.getRtiFactory().createSuppliedAttributes();
+        for (int i: this.pacjentHlaHandle) {
+            int classHandle = rtiamb.getObjectClass(pacjentHlaHandle[i]);
+            int miejsceHandle = rtiamb.getAttributeHandle( "miejsce", classHandle );
+            byte[] miejscekValue = ByteBuffer.allocate(4).putInt(i).array();
+            //zmiana miejsca pobytu pacjenta
+
+            attributes.add(miejsceHandle, miejscekValue);
+            LogicalTime logicalTime = convertTime( time );
+            rtiamb.updateAttributeValues( pacjentHlaHandle[i], attributes, "actualize".getBytes(), logicalTime );
+        }
     }
 
     private void waitForUser()
@@ -127,6 +173,16 @@ public class PacjentFederate {
     }
 
     private void publishAndSubscribe() throws RTIexception {
+        int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.Pacjent");
+        int idHandle    = rtiamb.getAttributeHandle( "id_pacjenta", classHandle );
+        int miejsceHandle    = rtiamb.getAttributeHandle( "miejsce", classHandle );
+
+        AttributeHandleSet attributes = RtiFactoryFactory.getRtiFactory().createAttributeHandleSet();
+        attributes.add( idHandle );
+        attributes.add( miejsceHandle );
+
+        rtiamb.publishObjectClass(classHandle, attributes);
+
         int addProductHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Czy_otwarte" );
         rtiamb.publishInteractionClass(addProductHandle);
     }
@@ -134,6 +190,7 @@ public class PacjentFederate {
     private void advanceTime( double timestep ) throws RTIexception
     {
         log("requesting time advance for: " + timestep);
+
         // request the advance
         fedamb.isAdvancing = true;
         LogicalTime newTime = convertTime( fedamb.federateTime + timestep );
@@ -142,6 +199,8 @@ public class PacjentFederate {
         {
             rtiamb.tick();
         }
+        fedamb.federateTime +=timestep;
+        log("Pacjent time: " + fedamb.federateTime);
     }
 
     private double randomTime() {
@@ -166,7 +225,7 @@ public class PacjentFederate {
 
     private void log( String message )
     {
-        System.out.println( "StorageFederate   : " + message );
+        System.out.println( "PacjentFederate   : " + message );
     }
 
     public static void main(String[] args) {

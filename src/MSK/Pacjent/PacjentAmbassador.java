@@ -6,7 +6,8 @@ import org.portico.impl.hla13.types.DoubleTime;
 
 public class PacjentAmbassador implements FederateAmbassador {
     protected double federateTime        = 0.0;
-    protected double federateLookahead   = 1.0;
+    protected double grantedTime         = 0.0;
+    protected double federateLookahead   = 5.0;
 
     protected boolean isRegulating       = false;
     protected boolean isConstrained      = false;
@@ -25,7 +26,7 @@ public class PacjentAmbassador implements FederateAmbassador {
 
     private void log( String message )
     {
-        System.out.println( "FederateAmbassador: " + message );
+        System.out.println( "PacjentAmbassador: " + message );
     }
 
     public void synchronizationPointRegistrationFailed( String label )
@@ -239,7 +240,7 @@ public class PacjentAmbassador implements FederateAmbassador {
 
     public void timeAdvanceGrant( LogicalTime theTime )
     {
-        this.federateTime = convertTime( theTime );
+        this.grantedTime = convertTime( theTime );
         this.isAdvancing = false;
     }
 

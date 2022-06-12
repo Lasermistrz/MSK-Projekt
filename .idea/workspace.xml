@@ -4,27 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d909859d-a9b8-483a-a0d4-fd471959c748" name="Changes" comment="Init">
-      <change afterPath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentAmbassador.java" afterDir="false" />
+    <list default="true" id="d909859d-a9b8-483a-a0d4-fd471959c748" name="Changes" comment="Pacjent wysyła Czy_otwarte do Głównego federata (jako nauka komunikacji)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/portico.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/portico.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msk.fed" beforeDir="false" afterPath="$PROJECT_DIR$/msk.fed" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/GUIAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/GUI/GUIAmbassador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/GUIFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/GUI/GUIFederate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Gabinet/GabinetAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Gabinet/GabinetAmbassador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Gabinet/GabinetFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Gabinet/GabinetFederate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Lekarz/LekarzAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Lekarz/LekarzAmbassador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Lekarz/LekarzFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Lekarz/LekarzFederate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/MainFederate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFederateAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/MainFederateAmbassador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pacjent/PacjentAmbassador.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pacjent/PacjentFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentFederate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Poczekalnia/PoczekalniaAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Poczekalnia/PoczekalniaAmbassador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Poczekalnia/PoczekalniaFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Poczekalnia/PoczekalniaFederate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Rejestracja/RefestracjaAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Rejestracja/RefestracjaAmbassador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Rejestracja/RejestracjaFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaFederate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Statystyka/StatystykaAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Statystyka/StatystykaAmbassador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Statystyka/StatystykaFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Statystyka/StatystykaFederate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/MainFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/MainFederate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentAmbassador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentFederate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Poczekalnia/PoczekalniaAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Poczekalnia/PoczekalniaAmbassador.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,8 +65,8 @@
       <recent name="D:\IdeaProjects\Symulacje\MSK-Projekt" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.MSK.MainFederate">
-    <configuration name="MSK.MainFederate" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Application.PacjentFederate">
+    <configuration name="MSK.MainFederate" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MSK.MainFederate" />
       <module name="MSK-Projekt" />
       <method v="2">
@@ -102,7 +88,6 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.MSK.MainFederate" />
         <item itemvalue="Application.PacjentFederate" />
       </list>
     </recent_temporary>
@@ -124,6 +109,9 @@
       <workItem from="1654520653885" duration="201000" />
       <workItem from="1654540451679" duration="3426000" />
       <workItem from="1654626575692" duration="1627000" />
+      <workItem from="1654857346783" duration="888000" />
+      <workItem from="1655025591074" duration="11779000" />
+      <workItem from="1655038900167" duration="105000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <created>1654434945314</created>
@@ -132,7 +120,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654434945314</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Pacjent wysyła Czy_otwarte do Głównego federata (jako nauka komunikacji)">
+      <created>1654857453104</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1654857453104</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -151,6 +146,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Init" />
-    <option name="LAST_COMMIT_MESSAGE" value="Init" />
+    <MESSAGE value="Pacjent wysyła Czy_otwarte do Głównego federata (jako nauka komunikacji)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Pacjent wysyła Czy_otwarte do Głównego federata (jako nauka komunikacji)" />
   </component>
 </project>
