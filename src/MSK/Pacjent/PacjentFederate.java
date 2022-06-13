@@ -19,7 +19,7 @@ import java.util.Random;
 public class PacjentFederate {
     public static final String READY_TO_RUN = "ReadyToRun";
     public static int idstatic=0;
-    private int[] pacjentHlaHandle = new int[50000];
+    public static int[] pacjentHlaHandle = new int[50000]; // maksymalna ilość przyjętych pacjentów
     /***
      * @value
      * 0 = rejetracja
@@ -83,7 +83,7 @@ public class PacjentFederate {
             advanceTime(randomTime());
             registerPacjentObject(fedamb.federateTime + fedamb.federateLookahead);
             //updateHLAObject(fedamb.federateTime + fedamb.federateLookahead);
-            //sendInteraction(fedamb.federateTime + fedamb.federateLookahead);
+            sendInteraction(fedamb.federateTime + fedamb.federateLookahead);
             rtiamb.tick();
         }
 
@@ -97,14 +97,17 @@ public class PacjentFederate {
         SuppliedAttributes attributes = RtiFactoryFactory.getRtiFactory().createSuppliedAttributes();
         int classHandle = rtiamb.getObjectClass(pacjentHlaHandle[idstatic]);
         int idHandle = rtiamb.getAttributeHandle( "id_pacjenta", classHandle );
-        byte[] idValue = ByteBuffer.allocate(4).putInt(idstatic).array();
+        byte[] idValue = EncodingHelpers.encodeInt(idstatic);
+        int miejsceHandle = rtiamb.getAttributeHandle( "miejsce", classHandle );
+        byte[] miejsceValue = EncodingHelpers.encodeInt(0);
 
         attributes.add(idHandle, idValue);
+        attributes.add(miejsceHandle, miejsceValue);
         LogicalTime logicalTime = convertTime( time );
         rtiamb.updateAttributeValues( pacjentHlaHandle[idstatic], attributes, "actualize pacjent".getBytes(), logicalTime );
         log("Przybył pacjent nr " + ByteBuffer.wrap(idValue).getInt());
-        idstatic++;
     }
+
 
     private void updateHLAObject(double time) throws RTIexception{
         SuppliedAttributes attributes =
@@ -157,19 +160,20 @@ public class PacjentFederate {
     }
 
     private void sendInteraction(double timeStep) throws RTIexception {
-        SuppliedParameters parameters =
-                RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
-        Random random = new Random();
-        byte[] quantity = EncodingHelpers.encodeString(String.valueOf(random.nextInt(10) + 100));
+        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+        byte[] id_pacjenta = EncodingHelpers.encodeInt(idstatic);
+        byte[] godzina_wejscia = EncodingHelpers.encodeDouble(timeStep);
 
-        int interactionHandle = rtiamb.getInteractionClassHandle("InteractionRoot.Czy_otwarte");
-        int idOpenHandle = rtiamb.getParameterHandle( "Czy_otwarte", interactionHandle );
+        int interactionHandle = rtiamb.getInteractionClassHandle("InteractionRoot.Wejscie_do_przychodni");
+        int idpacjentaHandle = rtiamb.getParameterHandle( "id_pacjenta", interactionHandle );
+        int godzinawejsciaHandle = rtiamb.getParameterHandle( "godzina_wejscia", interactionHandle );
 
-        parameters.add(idOpenHandle, quantity);
-
+        parameters.add(idpacjentaHandle,id_pacjenta );
+        parameters.add(godzinawejsciaHandle,godzina_wejscia );
         LogicalTime time = convertTime( timeStep );
         rtiamb.sendInteraction( interactionHandle, parameters, "tag".getBytes(), time );
-        log("Send number ");
+        log("Send interaction ");
+        idstatic++;
     }
 
     private void publishAndSubscribe() throws RTIexception {
@@ -182,9 +186,11 @@ public class PacjentFederate {
         attributes.add( miejsceHandle );
 
         rtiamb.publishObjectClass(classHandle, attributes);
+       // rtiamb.subscribeObjectClassAttributes(classHandle, attributes);
 
-        int addProductHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Czy_otwarte" );
-        rtiamb.publishInteractionClass(addProductHandle);
+        int wejscieHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Wejscie_do_przychodni" );
+        fedamb.wejscieHandle = wejscieHandle;
+        rtiamb.publishInteractionClass(wejscieHandle);
     }
 
     private void advanceTime( double timestep ) throws RTIexception

@@ -1,9 +1,11 @@
 package MSK.Rejestracja;
 
-import MSK.MainFederate;
+import MSK.GUI.MainFederate;
 import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
 import org.portico.impl.hla13.types.DoubleTime;
+
+import java.util.ArrayList;
 
 public class RejestracjaAmbassador implements FederateAmbassador{
     //----------------------------------------------------------
@@ -25,7 +27,10 @@ public class RejestracjaAmbassador implements FederateAmbassador{
     protected boolean isReadyToRun       = false;
 
     protected boolean running 			 = true;
-    protected int finishHandle;
+    protected int wejscieDoPrzychodniHandle;
+    protected int przeniesienieHlaHandle;
+    public static ArrayList<Integer> lista = new ArrayList<>();
+
 
     private double convertTime( LogicalTime logicalTime )
     {
@@ -234,39 +239,17 @@ public class RejestracjaAmbassador implements FederateAmbassador{
                                     LogicalTime theTime,
                                     EventRetractionHandle eventRetractionHandle )
     {
+
         StringBuilder builder = new StringBuilder( "Interaction Received:" );
 
-        // print the handle
-        builder.append( " handle=" + interactionClass );
-        // print the tag
-        builder.append( ", tag=" + EncodingHelpers.decodeString(tag) );
-        // print the time (if we have it) we'll get null if we are just receiving
-        // a forwarded call from the other reflect callback above
-        if( theTime != null )
-        {
-            builder.append( ", time=" + convertTime(theTime) );
-        }
-
-
-        // print the parameer information
-        builder.append( ", parameterCount=" + theInteraction.size() );
-        builder.append( "\n" );
-        for( int i = 0; i < theInteraction.size(); i++ )
-        {
-            try
-            {
-                // print the parameter handle
-                builder.append( "\tparamHandle=" );
-                builder.append( theInteraction.getParameterHandle(i) );
-                // print the parameter value
-                builder.append( ", paramValue=" );
-                builder.append(
-                        EncodingHelpers.decodeString(theInteraction.getValue(i)) );
-                builder.append( "\n" );
-            }
-            catch( ArrayIndexOutOfBounds aioob )
-            {
-                // won't happen
+        if(interactionClass == wejscieDoPrzychodniHandle){
+            try {
+                int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
+                double godzina_wejscia = EncodingHelpers.decodeDouble(theInteraction.getValue(1));
+                builder.append("Przybył pacjent nr " + id_pacjenta + " , time=" + godzina_wejscia);
+                lista.add(id_pacjenta);
+            } catch (ArrayIndexOutOfBounds e) {
+                throw new RuntimeException(e);
             }
         }
 

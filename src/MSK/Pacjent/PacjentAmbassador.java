@@ -1,6 +1,6 @@
 package MSK.Pacjent;
 
-import MSK.MainFederate;
+import MSK.GUI.MainFederate;
 import hla.rti.*;
 import org.portico.impl.hla13.types.DoubleTime;
 
@@ -17,6 +17,7 @@ public class PacjentAmbassador implements FederateAmbassador {
     protected boolean isReadyToRun       = false;
 
     public boolean running 			 = true;
+    protected int wejscieHandle;
 
     private double convertTime( LogicalTime logicalTime )
     {

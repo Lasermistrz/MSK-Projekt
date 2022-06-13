@@ -1,4 +1,4 @@
-package MSK;
+package MSK.GUI;
 
 import hla.rti.*;
 import hla.rti.jlc.RtiFactoryFactory;
@@ -153,9 +153,9 @@ public class MainFederate {
 
         rtiamb.subscribeObjectClassAttributes(classHandle,attributes);
 
-
-        int getProductHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Czy_otwarte" );
-        rtiamb.subscribeInteractionClass( getProductHandle );
+        int wejscieHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Wejscie_do_przychodni" );
+        fedamb.wejscieDoPrzychodniHandle = wejscieHandle;
+        rtiamb.subscribeInteractionClass( wejscieHandle );
     }
 
     private void enableTimePolicy() throws RTIexception

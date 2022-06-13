@@ -1,8 +1,12 @@
 package MSK.Poczekalnia;
 
-import MSK.MainFederate;
+import MSK.GUI.MainFederate;
+import MSK.Pacjent.PacjentFederate;
 import hla.rti.*;
+import hla.rti.jlc.EncodingHelpers;
 import org.portico.impl.hla13.types.DoubleTime;
+
+import java.util.ArrayList;
 
 public class PoczekalniaAmbassador implements FederateAmbassador {
 
@@ -15,8 +19,10 @@ public class PoczekalniaAmbassador implements FederateAmbassador {
 
     protected boolean isAnnounced        = false;
     protected boolean isReadyToRun       = false;
-
     protected boolean running 			 = true;
+    protected int przeniesienieHlaHandle;
+    public static ArrayList<Integer> lista = new ArrayList<>();
+    public static final int poczekalniaSize =30;
 
     private double convertTime( LogicalTime logicalTime )
     {
@@ -139,8 +145,20 @@ public class PoczekalniaAmbassador implements FederateAmbassador {
     }
 
     @Override
-    public void receiveInteraction(int i, ReceivedInteraction receivedInteraction, byte[] bytes, LogicalTime logicalTime, EventRetractionHandle eventRetractionHandle) throws InteractionClassNotKnown, InteractionParameterNotKnown, InvalidFederationTime, FederateInternalError {
+    public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle) throws InteractionClassNotKnown, InteractionParameterNotKnown, InvalidFederationTime, FederateInternalError {
+        StringBuilder builder = new StringBuilder( "Interaction Received:" );
 
+        try {
+            if(interactionClass == przeniesienieHlaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1))==1){
+                int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
+                PoczekalniaAmbassador.lista.add(id_pacjenta);
+                builder.append("Dodano Pacjenta nr " + id_pacjenta + " do poczekalnii");
+            }
+        } catch (ArrayIndexOutOfBounds e) {
+            throw new RuntimeException(e);
+        }
+
+        log( builder.toString() );
     }
 
     @Override

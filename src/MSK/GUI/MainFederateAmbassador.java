@@ -1,11 +1,9 @@
-package MSK;
+package MSK.GUI;
 
 import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
 import hla.rti1516.jlc.NullFederateAmbassador;
 import org.portico.impl.hla13.types.DoubleTime;
-
-import java.util.ArrayList;
 
 public class MainFederateAmbassador extends NullFederateAmbassador implements FederateAmbassador  {
     protected double federateTime        = 0.0;
@@ -19,8 +17,7 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
     protected boolean isReadyToRun       = false;
 
     protected boolean running 			 = true;
-    protected int finishHandle;
-    protected int sumNumberReceived;
+    protected int wejscieDoPrzychodniHandle;
 
     public MainFederateAmbassador(){}
 
@@ -149,8 +146,8 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
 
     public void discoverObjectInstance( int theObject, int theObjectClass, String objectName )
     {
-        log( "Discoverd Object: handle=" + theObject + ", classHandle=" +
-                theObjectClass + ", name=" + objectName );
+        /*log( "Discoverd Object: handle=" + theObject + ", classHandle=" +
+                theObjectClass + ", name=" + objectName );*/
     }
 
     @Override
@@ -160,7 +157,7 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
 
     public void reflectAttributeValues( int theObject, ReflectedAttributes theAttributes, byte[] tag, LogicalTime theTime, EventRetractionHandle retractionHandle )
     {
-        StringBuilder builder = new StringBuilder( "Reflection for object:" );
+        /*StringBuilder builder = new StringBuilder( "Reflection for object:" );
 
         builder.append( " handle=" + theObject );
         builder.append( ", tag=" + EncodingHelpers.decodeString(tag) );
@@ -185,7 +182,7 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
             catch( ArrayIndexOutOfBounds aioob ) { }
         }
 
-        log( builder.toString() );
+        log( builder.toString() );*/
     }
 
     public void receiveInteraction( int interactionClass, ReceivedInteraction theInteraction, byte[] tag )
@@ -197,30 +194,14 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
     {
         StringBuilder builder = new StringBuilder( "Interaction Received:" );
 
-        builder.append( " handle=" + interactionClass );
-        builder.append( ", tag=" + EncodingHelpers.decodeString(tag) );
-        if( theTime != null )
-        {
-            builder.append( ", time=" + convertTime(theTime) );
-        }
-
-
-        builder.append( ", parameterCount=" + theInteraction.size() );
-        builder.append( "\n" );
-        for( int i = 0; i < theInteraction.size(); i++ )
-        {
-            try
-            {
-                // print the parameter handle
-                builder.append( "\tparamHandle=" );
-                builder.append( theInteraction.getParameterHandle(i) );
-                // print the parameter value
-                builder.append( ", paramValue=" );
-                builder.append(
-                        EncodingHelpers.decodeString(theInteraction.getValue(i)) );
-                builder.append( "\n" );
+        if(interactionClass == wejscieDoPrzychodniHandle){
+            try {
+                int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
+                double godzina_wejscia = EncodingHelpers.decodeDouble(theInteraction.getValue(1));
+                builder.append("Przybył pacjent nr " + id_pacjenta + " , time=" + godzina_wejscia);
+            } catch (ArrayIndexOutOfBounds e) {
+                throw new RuntimeException(e);
             }
-            catch( ArrayIndexOutOfBounds aioob ) { }
         }
 
         log( builder.toString() );

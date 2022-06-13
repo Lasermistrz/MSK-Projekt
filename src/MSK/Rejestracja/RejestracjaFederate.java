@@ -1,6 +1,9 @@
 package MSK.Rejestracja;
 
 
+import MSK.Pacjent.PacjentFederate;
+import MSK.Poczekalnia.PoczekalniaAmbassador;
+import MSK.Poczekalnia.PoczekalniaFederate;
 import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
 import hla.rti.jlc.RtiFactoryFactory;
@@ -12,15 +15,17 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class RejestracjaFederate {
     public static final String READY_TO_RUN = "ReadyToRun";
     protected int rejestracjaHlaHandle;
-
     private RTIambassador rtiamb;
     private RejestracjaAmbassador fedamb;
+    private int iloscWRejestracji=0;
     private final double timeStep = 10.0;
+
 
     public void runFederate() throws RTIexception {
         rtiamb = RtiFactoryFactory.getRtiFactory().createRtiAmbassador();
@@ -65,22 +70,26 @@ public class RejestracjaFederate {
 
         enableTimePolicy();
 
-        registerRejestracjaObject();
-
         publishAndSubscribe();
+
+        registerRejestracjaObject();
 
         while (fedamb.running) {
             advanceTime(randomTime());
 
             //updateHLAObject(fedamb.federateTime + fedamb.federateLookahead);
-            //sendInteraction(fedamb.federateTime + fedamb.federateLookahead);
+            if(PoczekalniaAmbassador.lista.size()<PoczekalniaAmbassador.poczekalniaSize&&RejestracjaAmbassador.lista.size()>0){
+                sendInteraction(fedamb.federateTime + fedamb.federateLookahead,RejestracjaAmbassador.lista.get(0));
+                RejestracjaAmbassador.lista.remove(0);
+            }
+
             rtiamb.tick();
         }
 
     }
 
     private void registerRejestracjaObject() throws RTIexception {
-        int classHandleCreate = rtiamb.getObjectClassHandle("ObjectRoot.Rejstracja");
+        int classHandleCreate = rtiamb.getObjectClassHandle("ObjectRoot.Rejestracja");
         this.rejestracjaHlaHandle = rtiamb.registerObjectInstance(classHandleCreate);
 
     }
@@ -135,20 +144,34 @@ public class RejestracjaFederate {
         }
     }
 
-    private void sendInteraction(double timeStep) throws RTIexception {
-        SuppliedParameters parameters =
-                RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
-        Random random = new Random();
-        byte[] quantity = EncodingHelpers.encodeString(String.valueOf(random.nextInt(10) + 100));
+    private void sendInteraction(double timeStep,int id_pacjenta) throws RTIexception {
+        try{
+            SuppliedAttributes attributes = RtiFactoryFactory.getRtiFactory().createSuppliedAttributes();
+            LogicalTime time = convertTime(timeStep);
+            //aktualizacja miejsca pacjenta
+            int pacjentHandle = PacjentFederate.pacjentHlaHandle[id_pacjenta];
+            int idPacjentaHandle = rtiamb.getAttributeHandle("id_pacjenta",pacjentHandle);
+            int miejsceHandle = rtiamb.getAttributeHandle("miejsce",pacjentHandle);
+            byte[] idPacjenta = EncodingHelpers.encodeInt(id_pacjenta);
+            byte[] miejsce = EncodingHelpers.encodeInt(1);
+            attributes.add(idPacjentaHandle,idPacjenta);
+            attributes.add(miejsceHandle,miejsce);
+            rtiamb.updateAttributeValues(pacjentHandle,attributes,"Actualize".getBytes(),time);
 
-        int interactionHandle = rtiamb.getInteractionClassHandle("InteractionRoot.Czy_otwarte");
-        int idOpenHandle = rtiamb.getParameterHandle( "Czy_otwarte", interactionHandle );
+            SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+            int przeniesienieHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Przeniesienie_pacjenta" );
+            int idPacjentaHandlePar = rtiamb.getParameterHandle("id_pacjenta",przeniesienieHandle);
+            int miejsceHandlePar = rtiamb.getParameterHandle("miejsce_koncowe",przeniesienieHandle);
 
-        parameters.add(idOpenHandle, quantity);
+            byte[] miejsce_koncowe = EncodingHelpers.encodeInt(1);
+            parameters.add(idPacjentaHandlePar,idPacjenta);
+            parameters.add(miejsceHandlePar,miejsce_koncowe);
+            rtiamb.sendInteraction(przeniesienieHandle,parameters,"tag".getBytes(),time);
+            log("Przeniesiono pacjenta nr " + id_pacjenta + "do poczekalni");
+        }catch(ObjectClassNotDefined e ){
+            log("Reason " + e.getMessage() +" "+ e);
+        }
 
-        LogicalTime time = convertTime( timeStep );
-        rtiamb.sendInteraction( interactionHandle, parameters, "tag".getBytes(), time );
-        log("Send number ");
     }
 
     private void publishAndSubscribe() throws RTIexception {
@@ -159,11 +182,31 @@ public class RejestracjaFederate {
         attributes.add( listaHandle );
 
         rtiamb.publishObjectClass(classHandle, attributes);
+
+        int pacjentHandle = rtiamb.getObjectClassHandle("ObjectRoot.Pacjent");
+        int idHandle    = rtiamb.getAttributeHandle( "id_pacjenta", pacjentHandle );
+        int miejsceHandle    = rtiamb.getAttributeHandle( "miejsce", pacjentHandle );
+
+        AttributeHandleSet attributes2 = RtiFactoryFactory.getRtiFactory().createAttributeHandleSet();
+        attributes2.add( idHandle );
+        attributes2.add( miejsceHandle );
+
+        //TODO problemy z odczytaniem klasy
+
+        rtiamb.publishObjectClass(pacjentHandle, attributes2);
+
+        int przeniesienieHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Przeniesienie_pacjenta" );
+        fedamb.przeniesienieHlaHandle = przeniesienieHandle;
+        rtiamb.publishInteractionClass(przeniesienieHandle);
+
+        int wejscieHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Wejscie_do_przychodni" );
+        fedamb.wejscieDoPrzychodniHandle = wejscieHandle;
+        rtiamb.subscribeInteractionClass( wejscieHandle );
     }
 
     private void advanceTime( double timestep ) throws RTIexception
     {
-        log("requesting time advance for: " + timestep);
+        //log("requesting time advance for: " + timestep);
 
         // request the advance
         fedamb.isAdvancing = true;
@@ -174,7 +217,6 @@ public class RejestracjaFederate {
             rtiamb.tick();
         }
         fedamb.federateTime +=timestep;
-        log("Pacjent time: " + fedamb.federateTime);
     }
 
     private double randomTime() {
