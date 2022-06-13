@@ -22,7 +22,6 @@ public class PoczekalniaAmbassador implements FederateAmbassador {
     protected boolean running 			 = true;
     protected int przeniesienieHlaHandle;
     public static ArrayList<Integer> lista = new ArrayList<>();
-    public static final int poczekalniaSize =30;
 
     private double convertTime( LogicalTime logicalTime )
     {
@@ -152,7 +151,7 @@ public class PoczekalniaAmbassador implements FederateAmbassador {
             if(interactionClass == przeniesienieHlaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1))==1){
                 int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
                 PoczekalniaAmbassador.lista.add(id_pacjenta);
-                builder.append("Dodano Pacjenta nr " + id_pacjenta + " do poczekalnii");
+                builder.append("Dodano Pacjenta nr " + id_pacjenta + " do poczekalni");
             }
         } catch (ArrayIndexOutOfBounds e) {
             throw new RuntimeException(e);

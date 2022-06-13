@@ -1,5 +1,6 @@
 package MSK.Poczekalnia;
 
+import MSK.Lekarz.LekarzFederate;
 import MSK.Rejestracja.RejestracjaAmbassador;
 import MSK.Rejestracja.RejestracjaFederate;
 import hla.rti.*;
@@ -20,6 +21,8 @@ public class PoczekalniaFederate {
 
     private RTIambassador rtiamb;
     private PoczekalniaAmbassador fedamb;
+
+
     private final double timeStep = 10.0;
 
 
@@ -74,7 +77,10 @@ public class PoczekalniaFederate {
             advanceTime(randomTime());
 
             //updateHLAObject(fedamb.federateTime + fedamb.federateLookahead);
-            //sendInteraction(fedamb.federateTime + fedamb.federateLookahead);
+            if(LekarzFederate.iloscWolnychLekarzy>0&&PoczekalniaAmbassador.lista.size()>0){
+                sendInteraction(fedamb.federateTime + fedamb.federateLookahead,PoczekalniaAmbassador.lista.get(0));
+                PoczekalniaAmbassador.lista.remove(0);
+            }
             rtiamb.tick();
         }
 
@@ -136,7 +142,19 @@ public class PoczekalniaFederate {
         }
     }
 
-    private void sendInteraction(double timeStep) throws RTIexception {
+    private void sendInteraction(double timeStep,int id_pacjenta) throws RTIexception {
+        LogicalTime time = convertTime(timeStep);
+
+        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+        int przeniesienieHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Przeniesienie_pacjenta" );
+        int idPacjentaHandlePar = rtiamb.getParameterHandle("id_pacjenta",przeniesienieHandle);
+        int miejsceHandlePar = rtiamb.getParameterHandle("miejsce_koncowe",przeniesienieHandle);
+        byte[] idPacjenta = EncodingHelpers.encodeInt(id_pacjenta);
+        byte[] miejsce_koncowe = EncodingHelpers.encodeInt(2);
+        parameters.add(idPacjentaHandlePar,idPacjenta);
+        parameters.add(miejsceHandlePar,miejsce_koncowe);
+        rtiamb.sendInteraction(przeniesienieHandle,parameters,"tag".getBytes(),time);
+        log("Przeniesiono pacjenta nr " + id_pacjenta + "do lekarza");
     }
 
     private void publishAndSubscribe() throws RTIexception {

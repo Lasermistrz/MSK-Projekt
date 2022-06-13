@@ -11,7 +11,6 @@ import java.net.MalformedURLException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Random;
@@ -19,7 +18,7 @@ import java.util.Random;
 public class PacjentFederate {
     public static final String READY_TO_RUN = "ReadyToRun";
     public static int idstatic=0;
-    public static int[] pacjentHlaHandle = new int[500]; // maksymalna ilość przyjętych pacjentów
+    public static int[] pacjentHlaHandle = new int[50000]; // maksymalna ilość przyjętych pacjentów
     /***
      * @value
      * 0 = rejetracja
@@ -27,7 +26,6 @@ public class PacjentFederate {
      * 2 = lekarz
      * 3 = gabinet
      */
-    private int miejsce;
 
 
     private RTIambassador rtiamb;
@@ -80,11 +78,16 @@ public class PacjentFederate {
         publishAndSubscribe();
 
         while (fedamb.running) {
+            if (fedamb.federateTime < 480){
             advanceTime(randomTime());
             registerPacjentObject(fedamb.federateTime + fedamb.federateLookahead);
             //updateHLAObject(fedamb.federateTime + fedamb.federateLookahead);
             sendInteraction(fedamb.federateTime + fedamb.federateLookahead);
             rtiamb.tick();
+           }else {
+                advanceTime(randomTime());
+                rtiamb.tick();
+            }
         }
 
     }
@@ -97,14 +100,11 @@ public class PacjentFederate {
         int classHandle = rtiamb.getObjectClass(pacjentHlaHandle[idstatic]);
         int idHandle = rtiamb.getAttributeHandle( "id_pacjenta", classHandle );
         byte[] idValue = EncodingHelpers.encodeInt(idstatic);
-        int miejsceHandle = rtiamb.getAttributeHandle( "miejsce", classHandle );
-        byte[] miejsceValue = EncodingHelpers.encodeInt(0);
 
         attributes.add(idHandle, idValue);
-        attributes.add(miejsceHandle, miejsceValue);
         LogicalTime logicalTime = convertTime( time );
         rtiamb.updateAttributeValues( pacjentHlaHandle[idstatic], attributes, "actualize pacjent".getBytes(), logicalTime );
-        log("Przybył pacjent nr " + ByteBuffer.wrap(idValue).getInt() + " jego handle wynosi " + pacjentHlaHandle[idstatic]);
+        log("Przybył pacjent nr " + ByteBuffer.wrap(idValue).getInt());
     }
 
 
@@ -113,11 +113,7 @@ public class PacjentFederate {
                 RtiFactoryFactory.getRtiFactory().createSuppliedAttributes();
         for (int i: this.pacjentHlaHandle) {
             int classHandle = rtiamb.getObjectClass(pacjentHlaHandle[i]);
-            int miejsceHandle = rtiamb.getAttributeHandle( "miejsce", classHandle );
-            byte[] miejscekValue = ByteBuffer.allocate(4).putInt(i).array();
-            //zmiana miejsca pobytu pacjenta
 
-            attributes.add(miejsceHandle, miejscekValue);
             LogicalTime logicalTime = convertTime( time );
             rtiamb.updateAttributeValues( pacjentHlaHandle[i], attributes, "actualize".getBytes(), logicalTime );
         }
@@ -178,11 +174,9 @@ public class PacjentFederate {
     private void publishAndSubscribe() throws RTIexception {
         int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.Pacjent");
         int idHandle    = rtiamb.getAttributeHandle( "id_pacjenta", classHandle );
-        int miejsceHandle    = rtiamb.getAttributeHandle( "miejsce", classHandle );
 
         AttributeHandleSet attributes = RtiFactoryFactory.getRtiFactory().createAttributeHandleSet();
         attributes.add( idHandle );
-        attributes.add( miejsceHandle );
 
         rtiamb.publishObjectClass(classHandle, attributes);
        // rtiamb.subscribeObjectClassAttributes(classHandle, attributes);

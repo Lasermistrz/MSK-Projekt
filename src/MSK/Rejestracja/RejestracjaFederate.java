@@ -23,7 +23,7 @@ public class RejestracjaFederate {
     protected int rejestracjaHlaHandle;
     private RTIambassador rtiamb;
     private RejestracjaAmbassador fedamb;
-    private int iloscWRejestracji=0;
+    public static int iloscWRejestracji=30;
     private final double timeStep = 10.0;
 
 
@@ -78,10 +78,11 @@ public class RejestracjaFederate {
             advanceTime(randomTime());
 
             //updateHLAObject(fedamb.federateTime + fedamb.federateLookahead);
-            if(PoczekalniaAmbassador.lista.size()<PoczekalniaAmbassador.poczekalniaSize&&RejestracjaAmbassador.lista.size()>0){
+            if(iloscWRejestracji>0&&RejestracjaAmbassador.lista.size()>0){
                 log(RejestracjaAmbassador.lista.get(0) + " pacjent \n");
                 sendInteraction(fedamb.federateTime + fedamb.federateLookahead, RejestracjaAmbassador.lista.get(0));
                 RejestracjaAmbassador.lista.remove(0);
+                iloscWRejestracji--;
             }
 
             rtiamb.tick();
@@ -146,29 +147,18 @@ public class RejestracjaFederate {
     }
 
     private void sendInteraction(double timeStep,int id_pacjenta) throws RTIexception {
-            SuppliedAttributes attributes = RtiFactoryFactory.getRtiFactory().createSuppliedAttributes();
             LogicalTime time = convertTime(timeStep);
-            //aktualizacja miejsca pacjenta
-            int pacjentHandle = PacjentFederate.pacjentHlaHandle[id_pacjenta];
-            int idPacjentaHandle = rtiamb.getAttributeHandle("id_pacjenta",pacjentHandle);
-            int miejsceHandle = rtiamb.getAttributeHandle("miejsce",pacjentHandle);
-            byte[] idPacjenta = EncodingHelpers.encodeInt(id_pacjenta);
-            byte[] miejsce = EncodingHelpers.encodeInt(1);
-            attributes.add(idPacjentaHandle,idPacjenta);
-            attributes.add(miejsceHandle,miejsce);
-            rtiamb.updateAttributeValues(pacjentHandle,attributes,"Actualize".getBytes(),time);
 
             SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
             int przeniesienieHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Przeniesienie_pacjenta" );
             int idPacjentaHandlePar = rtiamb.getParameterHandle("id_pacjenta",przeniesienieHandle);
             int miejsceHandlePar = rtiamb.getParameterHandle("miejsce_koncowe",przeniesienieHandle);
-
+            byte[] idPacjenta = EncodingHelpers.encodeInt(id_pacjenta);
             byte[] miejsce_koncowe = EncodingHelpers.encodeInt(1);
             parameters.add(idPacjentaHandlePar,idPacjenta);
             parameters.add(miejsceHandlePar,miejsce_koncowe);
             rtiamb.sendInteraction(przeniesienieHandle,parameters,"tag".getBytes(),time);
             log("Przeniesiono pacjenta nr " + id_pacjenta + "do poczekalni");
-
 
     }
 
@@ -181,18 +171,6 @@ public class RejestracjaFederate {
 
         rtiamb.publishObjectClass(classHandle, attributes);
 
-        int pacjentHandle = rtiamb.getObjectClassHandle("ObjectRoot.Pacjent");
-        int idHandle    = rtiamb.getAttributeHandle( "id_pacjenta", pacjentHandle );
-        int miejsceHandle    = rtiamb.getAttributeHandle( "miejsce", pacjentHandle );
-
-        AttributeHandleSet attributes2 = RtiFactoryFactory.getRtiFactory().createAttributeHandleSet();
-        attributes2.add( idHandle );
-        attributes2.add( miejsceHandle );
-
-        //TODO problemy z odczytaniem klasy
-
-        rtiamb.publishObjectClass(pacjentHandle, attributes2);
-        rtiamb.subscribeObjectClassAttributes(pacjentHandle,attributes2);
 
         int przeniesienieHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Przeniesienie_pacjenta" );
         fedamb.przeniesienieHlaHandle = przeniesienieHandle;

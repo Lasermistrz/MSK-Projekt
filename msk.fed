@@ -18,7 +18,6 @@
       )
 	 (class Pacjent
         (attribute id_pacjenta reliable timestamp TestSpace)
-        (attribute miejsce reliable timestamp TestSpace)
       )
 	 (class Gabinet
         (attribute lista reliable timestamp TestSpace)

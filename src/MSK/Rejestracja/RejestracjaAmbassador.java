@@ -252,6 +252,13 @@ public class RejestracjaAmbassador implements FederateAmbassador{
                 throw new RuntimeException(e);
             }
         }
+        try {
+            if(interactionClass == przeniesienieHlaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1))==2){
+                RejestracjaFederate.iloscWRejestracji++;
+            }
+        } catch (ArrayIndexOutOfBounds e) {
+            throw new RuntimeException(e);
+        }
 
         log( builder.toString() );
     }
