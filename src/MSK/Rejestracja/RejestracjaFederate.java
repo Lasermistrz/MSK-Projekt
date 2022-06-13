@@ -79,7 +79,8 @@ public class RejestracjaFederate {
 
             //updateHLAObject(fedamb.federateTime + fedamb.federateLookahead);
             if(PoczekalniaAmbassador.lista.size()<PoczekalniaAmbassador.poczekalniaSize&&RejestracjaAmbassador.lista.size()>0){
-                sendInteraction(fedamb.federateTime + fedamb.federateLookahead,RejestracjaAmbassador.lista.get(0));
+                log(RejestracjaAmbassador.lista.get(0) + " pacjent \n");
+                sendInteraction(fedamb.federateTime + fedamb.federateLookahead, RejestracjaAmbassador.lista.get(0));
                 RejestracjaAmbassador.lista.remove(0);
             }
 
@@ -145,7 +146,6 @@ public class RejestracjaFederate {
     }
 
     private void sendInteraction(double timeStep,int id_pacjenta) throws RTIexception {
-        try{
             SuppliedAttributes attributes = RtiFactoryFactory.getRtiFactory().createSuppliedAttributes();
             LogicalTime time = convertTime(timeStep);
             //aktualizacja miejsca pacjenta
@@ -168,9 +168,7 @@ public class RejestracjaFederate {
             parameters.add(miejsceHandlePar,miejsce_koncowe);
             rtiamb.sendInteraction(przeniesienieHandle,parameters,"tag".getBytes(),time);
             log("Przeniesiono pacjenta nr " + id_pacjenta + "do poczekalni");
-        }catch(ObjectClassNotDefined e ){
-            log("Reason " + e.getMessage() +" "+ e);
-        }
+
 
     }
 
@@ -194,10 +192,12 @@ public class RejestracjaFederate {
         //TODO problemy z odczytaniem klasy
 
         rtiamb.publishObjectClass(pacjentHandle, attributes2);
+        rtiamb.subscribeObjectClassAttributes(pacjentHandle,attributes2);
 
         int przeniesienieHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Przeniesienie_pacjenta" );
         fedamb.przeniesienieHlaHandle = przeniesienieHandle;
         rtiamb.publishInteractionClass(przeniesienieHandle);
+        rtiamb.subscribeInteractionClass(przeniesienieHandle);
 
         int wejscieHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Wejscie_do_przychodni" );
         fedamb.wejscieDoPrzychodniHandle = wejscieHandle;

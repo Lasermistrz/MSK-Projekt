@@ -19,7 +19,7 @@ import java.util.Random;
 public class PacjentFederate {
     public static final String READY_TO_RUN = "ReadyToRun";
     public static int idstatic=0;
-    public static int[] pacjentHlaHandle = new int[50000]; // maksymalna ilość przyjętych pacjentów
+    public static int[] pacjentHlaHandle = new int[500]; // maksymalna ilość przyjętych pacjentów
     /***
      * @value
      * 0 = rejetracja
@@ -91,8 +91,7 @@ public class PacjentFederate {
 
     private void registerPacjentObject(double time) throws RTIexception {
         int classHandleCreate = rtiamb.getObjectClassHandle("ObjectRoot.Pacjent");
-        this.pacjentHlaHandle[idstatic] = rtiamb.registerObjectInstance(classHandleCreate);
-
+        pacjentHlaHandle[idstatic] = rtiamb.registerObjectInstance(classHandleCreate);
 
         SuppliedAttributes attributes = RtiFactoryFactory.getRtiFactory().createSuppliedAttributes();
         int classHandle = rtiamb.getObjectClass(pacjentHlaHandle[idstatic]);
@@ -105,7 +104,7 @@ public class PacjentFederate {
         attributes.add(miejsceHandle, miejsceValue);
         LogicalTime logicalTime = convertTime( time );
         rtiamb.updateAttributeValues( pacjentHlaHandle[idstatic], attributes, "actualize pacjent".getBytes(), logicalTime );
-        log("Przybył pacjent nr " + ByteBuffer.wrap(idValue).getInt());
+        log("Przybył pacjent nr " + ByteBuffer.wrap(idValue).getInt() + " jego handle wynosi " + pacjentHlaHandle[idstatic]);
     }
 
 
