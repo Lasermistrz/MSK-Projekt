@@ -8,5 +8,5 @@ org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: Exa
 	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
 	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
 	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
-	at MSK.Pacjent.PacjentFederate.runFederate(PacjentFederate.java:45)
-	at MSK.Pacjent.PacjentFederate.main(PacjentFederate.java:235)
+	at MSK.MainFederate.runFederate(MainFederate.java:60)
+	at MSK.MainFederate.main(MainFederate.java:208)

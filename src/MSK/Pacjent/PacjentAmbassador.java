@@ -16,7 +16,7 @@ public class PacjentAmbassador implements FederateAmbassador {
     protected boolean isAnnounced        = false;
     protected boolean isReadyToRun       = false;
 
-    protected boolean running 			 = true;
+    public boolean running 			 = true;
 
     private double convertTime( LogicalTime logicalTime )
     {

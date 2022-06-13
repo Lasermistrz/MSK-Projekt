@@ -143,6 +143,17 @@ public class MainFederate {
     }
 
     private void publishAndSubscribe() throws RTIexception {
+        int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.Pacjent");
+        int idHandle = rtiamb.getAttributeHandle("id_pacjenta",classHandle);
+        int miejsceHandle = rtiamb.getAttributeHandle("miejsce",classHandle);
+
+        AttributeHandleSet attributes = RtiFactoryFactory.getRtiFactory().createAttributeHandleSet();
+        attributes.add( idHandle );
+        attributes.add( miejsceHandle );
+
+        rtiamb.subscribeObjectClassAttributes(classHandle,attributes);
+
+
         int getProductHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Czy_otwarte" );
         rtiamb.subscribeInteractionClass( getProductHandle );
     }

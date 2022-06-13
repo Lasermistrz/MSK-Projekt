@@ -9,8 +9,8 @@
       <change beforePath="$PROJECT_DIR$/logs/portico.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/portico.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MSK/MainFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/MainFederate.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentAmbassador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentFederate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/Poczekalnia/PoczekalniaAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Poczekalnia/PoczekalniaAmbassador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Rejestracja/RefestracjaAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaAmbassador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaFederate.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +65,7 @@
       <recent name="D:\IdeaProjects\Symulacje\MSK-Projekt" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.PacjentFederate">
+  <component name="RunManager" selected="Application.MSK.MainFederate">
     <configuration name="MSK.MainFederate" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MSK.MainFederate" />
       <module name="MSK-Projekt" />
@@ -111,7 +111,8 @@
       <workItem from="1654626575692" duration="1627000" />
       <workItem from="1654857346783" duration="888000" />
       <workItem from="1655025591074" duration="11779000" />
-      <workItem from="1655038900167" duration="105000" />
+      <workItem from="1655038900167" duration="263000" />
+      <workItem from="1655106890188" duration="2529000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <created>1654434945314</created>
