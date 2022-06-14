@@ -81,7 +81,6 @@ public class PacjentFederate {
             if (fedamb.federateTime < 465){
             advanceTime(3*randomTime());
             registerPacjentObject(fedamb.federateTime + fedamb.federateLookahead);
-            //updateHLAObject(fedamb.federateTime + fedamb.federateLookahead);
             sendInteraction(fedamb.federateTime + fedamb.federateLookahead);
             rtiamb.tick();
            }else {
@@ -108,16 +107,6 @@ public class PacjentFederate {
     }
 
 
-    private void updateHLAObject(double time) throws RTIexception{
-        SuppliedAttributes attributes =
-                RtiFactoryFactory.getRtiFactory().createSuppliedAttributes();
-        for (int i: this.pacjentHlaHandle) {
-            int classHandle = rtiamb.getObjectClass(pacjentHlaHandle[i]);
-
-            LogicalTime logicalTime = convertTime( time );
-            rtiamb.updateAttributeValues( pacjentHlaHandle[i], attributes, "actualize".getBytes(), logicalTime );
-        }
-    }
 
     private void waitForUser()
     {

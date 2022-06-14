@@ -10,11 +10,9 @@ org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: Exa
 	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
 	at MSK.GUI.MainFederate.runFederate(MainFederate.java:153)
 	at MSK.GUI.MainFederate.main(MainFederate.java:325)
-ERROR [main] portico.lrc: Federates still joined: [1, 2, 3, 4, 5]
-org.portico.lrc.compat.JFederatesCurrentlyJoined: Federates still joined: [1, 2, 3, 4, 5]
-	at org.portico.bindings.jgroups.Federation.sendDestroyFederation(Federation.java:354)
-	at org.portico.bindings.jgroups.JGroupsConnection.destroyFederation(JGroupsConnection.java:333)
-	at org.portico.lrc.services.federation.handlers.outgoing.DestroyFederationHandler.process(DestroyFederationHandler.java:57)
+ERROR [main] portico.lrc: Federates still jWARN  [VERIFY_SUSPECT.TimerThread,ExampleFederation,DESKTOP-UNJQHH0-65320] portico.lrc.jgroups: Detected that federate [StatystykaFederate] may have crashed, investigating...
+WARN  [Regular] portico.lrc.jgroups: Federate [StatystykaFederate] has crashed. Sending fake resignation because it was too rude to.
+ org.portico.lrc.services.federation.handlers.outgoing.DestroyFederationHandler.process(DestroyFederationHandler.java:57)
 	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
 	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
 	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)

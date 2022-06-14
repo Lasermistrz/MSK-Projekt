@@ -157,32 +157,6 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
     }
 
     public void reflectAttributeValues(int theObject, ReflectedAttributes theAttributes, byte[] tag, LogicalTime theTime, EventRetractionHandle retractionHandle) {
-        /*StringBuilder builder = new StringBuilder( "Reflection for object:" );
-
-        builder.append( " handle=" + theObject );
-        builder.append( ", tag=" + EncodingHelpers.decodeString(tag) );
-        if( theTime != null )
-        {
-            builder.append( ", time=" + convertTime(theTime) );
-        }
-
-        builder.append( ", attributeCount=" + theAttributes.size() );
-        builder.append( "\n" );
-        for( int i = 0; i < theAttributes.size(); i++ )
-        {
-            try
-            {
-                builder.append( "\tattributeHandle=" );
-                builder.append( theAttributes.getAttributeHandle(i) );
-                builder.append( ", attributeValue=" );
-                builder.append(
-                        EncodingHelpers.decodeString(theAttributes.getValue(i)) );
-                builder.append( "\n" );
-            }
-            catch( ArrayIndexOutOfBounds aioob ) { }
-        }
-
-        log( builder.toString() );*/
     }
 
     public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag) {

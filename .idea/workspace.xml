@@ -5,14 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d909859d-a9b8-483a-a0d4-fd471959c748" name="Changes" comment="Pacjent wysyła Czy_otwarte do Głównego federata (jako nauka komunikacji)">
+      <change afterPath="$PROJECT_DIR$/src/MSK/Statystyka/StatisticTime.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/MSK/Statystyka/Statistics.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/portico.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/portico.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/GUI/MainFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/GUI/MainFederate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/guiandstatistics/ConsultingRoom.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/guiandstatistics/Doctor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/guiandstatistics/GUI.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/guiandstatistics/Statistic.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/guiandstatistics/StatisticTime.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/GUI/MainFederateAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/GUI/MainFederateAmbassador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Gabinet/GabinetFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Gabinet/GabinetFederate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Lekarz/LekarzFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Lekarz/LekarzFederate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentFederate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Poczekalnia/PoczekalniaFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Poczekalnia/PoczekalniaFederate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaFederate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Statystyka/StatystykaAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Statystyka/StatystykaAmbassador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Statystyka/StatystykaFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Statystyka/StatystykaFederate.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +76,7 @@
       <recent name="MSK.GUI" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.MainFederate">
+  <component name="RunManager" selected="Application.GabinetFederate">
     <configuration name="GabinetFederate" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MSK.Gabinet.GabinetFederate" />
       <module name="MSK-Projekt" />
@@ -132,12 +136,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RejestracjaFederate" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="MSK.Rejestracja.RejestracjaFederate" />
+    <configuration name="StatystykaFederate" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="MSK.Statystyka.StatystykaFederate" />
       <module name="MSK-Projekt" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="MSK.Rejestracja.*" />
+          <option name="PATTERN" value="MSK.Statystyka.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -151,7 +155,7 @@
         <item itemvalue="Application.LekarzFederate" />
         <item itemvalue="Application.PacjentFederate" />
         <item itemvalue="Application.PoczekalniaFederate" />
-        <item itemvalue="Application.RejestracjaFederate" />
+        <item itemvalue="Application.StatystykaFederate" />
       </list>
     </recent_temporary>
   </component>
@@ -179,7 +183,8 @@
       <workItem from="1655130974845" duration="2981000" />
       <workItem from="1655135870367" duration="7814000" />
       <workItem from="1655150255192" duration="88000" />
-      <workItem from="1655194399741" duration="14296000" />
+      <workItem from="1655194399741" duration="14993000" />
+      <workItem from="1655214865143" duration="5500000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <created>1654434945314</created>

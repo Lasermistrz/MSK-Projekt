@@ -76,7 +76,6 @@ public class PoczekalniaFederate {
         while (fedamb.running) {
             advanceTime(randomTime());
 
-            //updateHLAObject(fedamb.federateTime + fedamb.federateLookahead);
             if(PoczekalniaAmbassador.iloscWolnychLekarzy>0&&PoczekalniaAmbassador.lista.size()>0){
                 sendInteraction(fedamb.federateTime + fedamb.federateLookahead,PoczekalniaAmbassador.lista.get(0));
                 PoczekalniaAmbassador.lista.remove(0);
@@ -91,21 +90,6 @@ public class PoczekalniaFederate {
         int classHandleCreate = rtiamb.getObjectClassHandle("ObjectRoot.Poczekalnia");
         this.rejestracjaHlaHandle = rtiamb.registerObjectInstance(classHandleCreate);
 
-    }
-
-    public void updateHLAObject(int Handle) throws RTIexception{
-        /*SuppliedAttributes attributes =
-                RtiFactoryFactory.getRtiFactory().createSuppliedAttributes();
-        for (int i: this.pacjentHlaHandle) {
-            int classHandle = rtiamb.getObjectClass(pacjentHlaHandle[i]);
-            int miejsceHandle = rtiamb.getAttributeHandle( "miejsce", classHandle );
-            byte[] miejscekValue = ByteBuffer.allocate(4).putInt(i).array();
-            //zmiana miejsca pobytu pacjenta
-
-            attributes.add(miejsceHandle, miejscekValue);
-            LogicalTime logicalTime = convertTime( time );
-            rtiamb.updateAttributeValues( pacjentHlaHandle[i], attributes, "actualize".getBytes(), logicalTime );
-        }*/
     }
 
     private void waitForUser()

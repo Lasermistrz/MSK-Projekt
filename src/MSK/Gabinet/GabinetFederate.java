@@ -76,22 +76,6 @@ public class GabinetFederate {
 
     }
 
-
-//    private void updateHLAObject(double time) throws RTIexception{
-//        SuppliedAttributes attributes =
-//                RtiFactoryFactory.getRtiFactory().createSuppliedAttributes();
-//        for (int i: this.pacjentHlaHandle) {
-//            int classHandle = rtiamb.getObjectClass(pacjentHlaHandle[i]);
-//            int miejsceHandle = rtiamb.getAttributeHandle( "miejsce", classHandle );
-//            byte[] miejscekValue = ByteBuffer.allocate(4).putInt(i).array();
-//            //zmiana miejsca pobytu pacjenta
-//
-//            attributes.add(miejsceHandle, miejscekValue);
-//            LogicalTime logicalTime = convertTime( time );
-//            rtiamb.updateAttributeValues( pacjentHlaHandle[i], attributes, "actualize".getBytes(), logicalTime );
-//        }
-//    }
-
     private void waitForUser()
     {
         log( " >>>>>>>>>> Press Enter to Continue <<<<<<<<<<" );
