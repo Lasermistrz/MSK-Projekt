@@ -5,6 +5,10 @@ import hla.rti.jlc.RtiFactoryFactory;
 import org.portico.impl.hla13.types.DoubleTime;
 import org.portico.impl.hla13.types.DoubleTimeInterval;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -17,6 +21,22 @@ public class MainFederate {
 
     private RTIambassador rtiamb;
     private MainFederateAmbassador fedamb;
+    /////////////////////////////////    GUI    ////////////////////////////////////
+    private JFrame frame;
+    private JPanel mainPanel;
+
+    private JLabel textTimeSimulation;
+    private double timeSimulation;
+    private JLabel textEndTimeSimulation;
+    private double endTimeSimulation;
+    private JLabel textPacjentInRejestraction;
+    private JLabel textDoctors;
+    private JLabel textGabinets;
+    private double pacjentInRejestraction;
+    private JLabel textPacjentInWaitingRoom;
+    private double pacjentInWaitingRoom;
+
+
 
     private void log( String message )
     {
@@ -52,6 +72,79 @@ public class MainFederate {
 
     public void runFederate( String federateName ) throws RTIexception
     {
+        frame = new JFrame();
+        frame.setTitle("MSK");
+        mainPanel = new JPanel();
+
+        JPanel upPanel = new JPanel();
+        JPanel downPanel = new JPanel();
+
+        timeSimulation = 0;
+        endTimeSimulation = 0;
+        pacjentInRejestraction = 0;
+        pacjentInWaitingRoom = 0;
+
+
+        //up panel
+        JLabel labelTimeSimulation = new JLabel("Aktualny czas symulacji:");
+        textTimeSimulation = new JLabel("0");
+
+        JLabel labelEndTimeSimulation = new JLabel("Czas zakończenia symulacji:");
+        textEndTimeSimulation = new JLabel("0");
+
+        //center panel
+        JLabel labelDoctors = new JLabel("Dostępni lekarze:");
+        textDoctors = new JLabel("0");
+
+        JLabel labelConsultingRoom = new JLabel("Dostępne gabinety:");
+        textGabinets = new JLabel("0");
+
+        //downPanel
+        JLabel labelPacjentInRejestraction = new JLabel("Ilość pacjentów w rejestracji:");
+        textPacjentInRejestraction = new JLabel("0");
+
+        JLabel labelPacjentInWaitingRoom = new JLabel("Ilość pacjentów w poczekalni:");
+        textPacjentInWaitingRoom = new JLabel("0");
+
+
+        upPanel.setLayout(new GridLayout(2, 4, 10, 10));
+        upPanel.setBounds(10, 5, 800, 90);
+        upPanel.add(labelTimeSimulation);
+        upPanel.add(textTimeSimulation);
+        upPanel.add(labelEndTimeSimulation);
+        upPanel.add(textEndTimeSimulation);
+        upPanel.add(labelDoctors);
+        upPanel.add(textDoctors);
+        upPanel.add(labelConsultingRoom);
+        upPanel.add(textGabinets);
+
+
+        downPanel.setLayout(new GridLayout(1, 4, 10, 10));
+        downPanel.setBounds(10, 90, 800, 90);
+        downPanel.add(labelPacjentInRejestraction);
+        downPanel.add(textPacjentInRejestraction);
+        downPanel.add(labelPacjentInWaitingRoom);
+        downPanel.add(textPacjentInWaitingRoom);
+
+
+        mainPanel.add(upPanel);
+        mainPanel.add(downPanel);
+        mainPanel.setLayout(null);
+
+
+        frame.add(mainPanel);
+        frame.setSize(830, 270);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
+
+        frame.addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent e){
+                System.exit(0);
+            }
+        });
+
         rtiamb = RtiFactoryFactory.getRtiFactory().createRtiAmbassador();
 
         try
@@ -116,8 +209,15 @@ public class MainFederate {
 
             advanceTime(timeToAdvance);
             log( "Time Advanced to " + fedamb.federateTime );
+            SetTimeSimulation(fedamb.federateTime);
+            SetEndTimeSimulation(MainFederateAmbassador.zakonczeniaCzas);
+            SetPacjentInRejestraction(MainFederateAmbassador.iloscPacjentowWRejestracji);
+            SetPacjentInWaitingRoom(MainFederateAmbassador.iloscPacjentowWPoczekalni);
+            setTextDoctors(MainFederateAmbassador.dostepniLekarze);
+            setTextGabinets(MainFederateAmbassador.dostepneGabinety);
 
             rtiamb.tick();
+
 
         }
         log("===================== KONIEC SYMULACJI ===================== ");
@@ -230,6 +330,28 @@ public class MainFederate {
         }
     }
 
+    public void SetTimeSimulation(double time){
+        textTimeSimulation.setText(String.format("%.2f", time));
+    }
+
+    public void SetEndTimeSimulation(double time){
+        textEndTimeSimulation.setText(String.format("%.2f", time));
+    }
+
+    public void SetPacjentInRejestraction(int time){
+        textPacjentInRejestraction.setText(String.valueOf(time));
+    }
+
+    public void SetPacjentInWaitingRoom(int time){
+        textPacjentInWaitingRoom.setText(String.valueOf(time));
+    }
+
+    public void setTextDoctors(int number){
+        textDoctors.setText(String.valueOf(number));
+    }
+    public void setTextGabinets(int number){
+        textGabinets.setText(String.valueOf(number));
+    }
 }
 
 
