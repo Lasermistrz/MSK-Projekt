@@ -21,6 +21,8 @@ public class PoczekalniaAmbassador implements FederateAmbassador {
     protected boolean isReadyToRun       = false;
     protected boolean running 			 = true;
     protected int przeniesienieHlaHandle;
+    public static int iloscWolnychLekarzy=5;
+    protected int wejscieDoLekarzaHlaHandle;
     public static ArrayList<Integer> lista = new ArrayList<>();
 
     private double convertTime( LogicalTime logicalTime )
@@ -145,19 +147,30 @@ public class PoczekalniaAmbassador implements FederateAmbassador {
 
     @Override
     public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle) throws InteractionClassNotKnown, InteractionParameterNotKnown, InvalidFederationTime, FederateInternalError {
-        StringBuilder builder = new StringBuilder( "Interaction Received:" );
 
         try {
             if(interactionClass == przeniesienieHlaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1))==1){
+                StringBuilder builder = new StringBuilder( "Interaction Received:" );
                 int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
                 PoczekalniaAmbassador.lista.add(id_pacjenta);
                 builder.append("Dodano Pacjenta nr " + id_pacjenta + " do poczekalni");
+                log( builder.toString() );
+            } else if (interactionClass == przeniesienieHlaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1)) == 3) {
+                StringBuilder builder = new StringBuilder( "Interaction Received:" );
+                PoczekalniaAmbassador.iloscWolnychLekarzy++;
+                builder.append("Zwolniono miejsce u lekarza");
+                log( builder.toString() );
+            }else if (interactionClass == przeniesienieHlaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1)) == 4) {
+                StringBuilder builder = new StringBuilder( "Interaction Received:" );
+                PoczekalniaAmbassador.iloscWolnychLekarzy++;
+                builder.append("Zwolniono miejsce u lekarza");
+                log( builder.toString() );
             }
         } catch (ArrayIndexOutOfBounds e) {
             throw new RuntimeException(e);
         }
 
-        log( builder.toString() );
+
     }
 
     @Override

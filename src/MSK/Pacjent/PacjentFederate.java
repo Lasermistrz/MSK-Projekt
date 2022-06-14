@@ -78,8 +78,8 @@ public class PacjentFederate {
         publishAndSubscribe();
 
         while (fedamb.running) {
-            if (fedamb.federateTime < 480){
-            advanceTime(randomTime());
+            if (fedamb.federateTime < 465){
+            advanceTime(3*randomTime());
             registerPacjentObject(fedamb.federateTime + fedamb.federateLookahead);
             //updateHLAObject(fedamb.federateTime + fedamb.federateLookahead);
             sendInteraction(fedamb.federateTime + fedamb.federateLookahead);
@@ -104,7 +104,7 @@ public class PacjentFederate {
         attributes.add(idHandle, idValue);
         LogicalTime logicalTime = convertTime( time );
         rtiamb.updateAttributeValues( pacjentHlaHandle[idstatic], attributes, "actualize pacjent".getBytes(), logicalTime );
-        log("Przybył pacjent nr " + ByteBuffer.wrap(idValue).getInt());
+        log("Przybyl pacjent nr " + ByteBuffer.wrap(idValue).getInt());
     }
 
 
@@ -167,7 +167,7 @@ public class PacjentFederate {
         parameters.add(godzinawejsciaHandle,godzina_wejscia );
         LogicalTime time = convertTime( timeStep );
         rtiamb.sendInteraction( interactionHandle, parameters, "tag".getBytes(), time );
-        log("Send interaction ");
+        //log("Send interaction ");
         idstatic++;
     }
 
@@ -188,7 +188,7 @@ public class PacjentFederate {
 
     private void advanceTime( double timestep ) throws RTIexception
     {
-        log("requesting time advance for: " + timestep);
+        //log("requesting time advance for: " + timestep);
 
         // request the advance
         fedamb.isAdvancing = true;
@@ -199,7 +199,7 @@ public class PacjentFederate {
             rtiamb.tick();
         }
         fedamb.federateTime +=timestep;
-        log("Pacjent time: " + fedamb.federateTime);
+        //log("Pacjent time: " + fedamb.federateTime);
     }
 
     private double randomTime() {

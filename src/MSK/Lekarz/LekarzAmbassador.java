@@ -19,8 +19,10 @@ public class LekarzAmbassador implements FederateAmbassador {
     protected boolean isAnnounced        = false;
     protected boolean isReadyToRun       = false;
     protected boolean running 			 = true;
+    protected int wejscieDoLekarzaHlaHandle;
     protected int przeniesienieHlaHandle;
     public static ArrayList<Integer> lista = new ArrayList<>();
+    public static int iloscWolnychGabinetow=5;
 
     private double convertTime( LogicalTime logicalTime )
     {
@@ -30,7 +32,7 @@ public class LekarzAmbassador implements FederateAmbassador {
 
     private void log( String message )
     {
-        System.out.println( "LekarzAmbassador: " + message );
+        System.out.println( "LekarzAmbassador : " + message );
     }
 
     public void synchronizationPointRegistrationFailed( String label )
@@ -144,19 +146,21 @@ public class LekarzAmbassador implements FederateAmbassador {
 
     @Override
     public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle) throws InteractionClassNotKnown, InteractionParameterNotKnown, InvalidFederationTime, FederateInternalError {
-        StringBuilder builder = new StringBuilder( "Interaction Received:" );
 
         try {
-            if(interactionClass == przeniesienieHlaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1))==1){
+            if(interactionClass == wejscieDoLekarzaHlaHandle){
+                StringBuilder builder = new StringBuilder( "Interaction Received:" );
                 int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
                 LekarzAmbassador.lista.add(id_pacjenta);
-                builder.append("Dodano Pacjenta nr " + id_pacjenta + " do lekarza");
+                double godzina = EncodingHelpers.decodeDouble(theInteraction.getValue(1));
+                builder.append("Dodano Pacjenta nr " + id_pacjenta + " do lekarza o godzinie " + godzina);
+                log( builder.toString() );
             }
         } catch (ArrayIndexOutOfBounds e) {
             throw new RuntimeException(e);
         }
 
-        log( builder.toString() );
+
     }
 
     @Override

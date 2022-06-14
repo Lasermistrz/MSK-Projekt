@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 
 public class MainFederate {
-    public static final int ITERATIONS = 200;
+    public static final int ITERATIONS =1000;
     public static final String READY_TO_RUN = "ReadyToRun";
     private final double timeStep = 1.0;
 
@@ -101,8 +101,8 @@ public class MainFederate {
         /*int objectHandle = registerObject();
         log( "Registered Object, handle=" + objectHandle );*/
 
-        //		for( int i = 0; i < ITERATIONS; i++ )
-        while(fedamb.running)
+        		for( int i = 0; i < ITERATIONS; i++ )
+        //while(fedamb.running)
         {
             // 9.1 update the attribute values of the instance //
             //updateAttributeValues( objectHandle );
@@ -113,6 +113,7 @@ public class MainFederate {
 
             // 9.3 request a time advance and wait until we get it
             double timeToAdvance = fedamb.federateTime + timeStep;
+
             advanceTime(timeToAdvance);
             log( "Time Advanced to " + fedamb.federateTime );
 
@@ -120,6 +121,13 @@ public class MainFederate {
 
         }
         log("===================== KONIEC SYMULACJI ===================== ");
+
+        log("Czas zakonczenia = " + MainFederateAmbassador.zakonczeniaCzas);
+        log("Czas dostepni lekarze = " + MainFederateAmbassador.dostepniLekarze);
+        log("Czas dostepne gabinety = " + MainFederateAmbassador.dostepneGabinety);
+        log("Czas ilosc pacjentow w rejestracji = " + MainFederateAmbassador.iloscPacjentowWRejestracji);
+        log("Czas ilosc pacjentow w poczekalni = " + MainFederateAmbassador.iloscPacjentowWPoczekalni);
+
 
         /*deleteObject( objectHandle );
         log( "Deleted Object, handle=" + objectHandle );*/
@@ -143,17 +151,17 @@ public class MainFederate {
     }
 
     private void publishAndSubscribe() throws RTIexception {
-        int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.Pacjent");
-        int idHandle = rtiamb.getAttributeHandle("id_pacjenta",classHandle);
+        int wejscieDoPrzychodniHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Wejscie_do_przychodni" );
+        fedamb.wejscieDoPrzychodniHandle = wejscieDoPrzychodniHandle;
+        rtiamb.subscribeInteractionClass( wejscieDoPrzychodniHandle );
 
-        AttributeHandleSet attributes = RtiFactoryFactory.getRtiFactory().createAttributeHandleSet();
-        attributes.add( idHandle );
+        int przeniesieniePacjentaHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Przeniesienie_pacjenta" );
+        fedamb.przeniesieniePacjentaHandle = przeniesieniePacjentaHandle;
+        rtiamb.subscribeInteractionClass( przeniesieniePacjentaHandle );
 
-        rtiamb.subscribeObjectClassAttributes(classHandle,attributes);
-
-        int wejscieHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Wejscie_do_przychodni" );
-        fedamb.wejscieDoPrzychodniHandle = wejscieHandle;
-        rtiamb.subscribeInteractionClass( wejscieHandle );
+        int wejscieDoLkearzaHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Wejscie_do_lekarza" );
+        fedamb.wejscieDoLekarzaHandle = wejscieDoLkearzaHandle;
+        rtiamb.subscribeInteractionClass( wejscieDoLkearzaHandle );
     }
 
     private void enableTimePolicy() throws RTIexception

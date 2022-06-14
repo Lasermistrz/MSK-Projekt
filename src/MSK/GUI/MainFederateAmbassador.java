@@ -5,54 +5,59 @@ import hla.rti.jlc.EncodingHelpers;
 import hla.rti1516.jlc.NullFederateAmbassador;
 import org.portico.impl.hla13.types.DoubleTime;
 
-public class MainFederateAmbassador extends NullFederateAmbassador implements FederateAmbassador  {
-    protected double federateTime        = 0.0;
-    protected double federateLookahead   = 1.0;
+public class MainFederateAmbassador extends NullFederateAmbassador implements FederateAmbassador {
+    protected double federateTime = 0.0;
+    protected double federateLookahead = 1.0;
 
-    protected boolean isRegulating       = false;
-    protected boolean isConstrained      = false;
-    protected boolean isAdvancing        = false;
+    protected boolean isRegulating = false;
+    protected boolean isConstrained = false;
+    protected boolean isAdvancing = false;
 
-    protected boolean isAnnounced        = false;
-    protected boolean isReadyToRun       = false;
+    protected boolean isAnnounced = false;
+    protected boolean isReadyToRun = false;
 
-    protected boolean running 			 = true;
+    protected boolean running = true;
     protected int wejscieDoPrzychodniHandle;
+    protected int przeniesieniePacjentaHandle;
+    protected int wejscieDoLekarzaHandle;
 
-    public MainFederateAmbassador(){}
+    /////////////////////////    Zmienne do GUI    ////////////////////////////
+    public static double aktualnyCzas = 0.0;
+    public static double zakonczeniaCzas = 0.0;
+    public static int dostepniLekarze = 5;
+    public static int dostepneGabinety = 5;
+    public static int iloscPacjentowWRejestracji = 0;
+    public static int iloscPacjentowWPoczekalni = 0;
 
-    private double convertTime( LogicalTime logicalTime )
-    {
+    public MainFederateAmbassador() {
+    }
+
+    private double convertTime(LogicalTime logicalTime) {
         // PORTICO SPECIFIC!!
-        return ((DoubleTime)logicalTime).getTime();
+        return ((DoubleTime) logicalTime).getTime();
     }
 
-    private void log( String message )
-    {
-        System.out.println( "FederateAmbassador: " + message );
+    private void log(String message) {
+        System.out.println("FederateAmbassador: " + message);
     }
 
-    public void synchronizationPointRegistrationFailed( String label )
-    {
-        log( "Failed to register sync point: " + label );
+    public void synchronizationPointRegistrationFailed(String label) {
+        log("Failed to register sync point: " + label);
     }
 
-    public void synchronizationPointRegistrationSucceeded( String label )
-    {
-        log( "Successfully registered sync point: " + label );
+    public void synchronizationPointRegistrationSucceeded(String label) {
+        log("Successfully registered sync point: " + label);
     }
 
-    public void announceSynchronizationPoint( String label, byte[] tag )
-    {
-        log( "Synchronization point announced: " + label );
-        if( label.equals(MainFederate.READY_TO_RUN) )
+    public void announceSynchronizationPoint(String label, byte[] tag) {
+        log("Synchronization point announced: " + label);
+        if (label.equals(MainFederate.READY_TO_RUN))
             this.isAnnounced = true;
     }
 
-    public void federationSynchronized( String label )
-    {
-        log( "Federation Synchronized: " + label );
-        if( label.equals(MainFederate.READY_TO_RUN) )
+    public void federationSynchronized(String label) {
+        log("Federation Synchronized: " + label);
+        if (label.equals(MainFederate.READY_TO_RUN))
             this.isReadyToRun = true;
     }
 
@@ -121,21 +126,18 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
 
     }
 
-    public void timeRegulationEnabled( LogicalTime theFederateTime )
-    {
-        this.federateTime = convertTime( theFederateTime );
+    public void timeRegulationEnabled(LogicalTime theFederateTime) {
+        this.federateTime = convertTime(theFederateTime);
         this.isRegulating = true;
     }
 
-    public void timeConstrainedEnabled( LogicalTime theFederateTime )
-    {
-        this.federateTime = convertTime( theFederateTime );
+    public void timeConstrainedEnabled(LogicalTime theFederateTime) {
+        this.federateTime = convertTime(theFederateTime);
         this.isConstrained = true;
     }
 
-    public void timeAdvanceGrant( LogicalTime theTime )
-    {
-        this.federateTime = convertTime( theTime );
+    public void timeAdvanceGrant(LogicalTime theTime) {
+        this.federateTime = convertTime(theTime);
         this.isAdvancing = false;
     }
 
@@ -144,8 +146,7 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
 
     }
 
-    public void discoverObjectInstance( int theObject, int theObjectClass, String objectName )
-    {
+    public void discoverObjectInstance(int theObject, int theObjectClass, String objectName) {
         /*log( "Discoverd Object: handle=" + theObject + ", classHandle=" +
                 theObjectClass + ", name=" + objectName );*/
     }
@@ -155,8 +156,7 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
 
     }
 
-    public void reflectAttributeValues( int theObject, ReflectedAttributes theAttributes, byte[] tag, LogicalTime theTime, EventRetractionHandle retractionHandle )
-    {
+    public void reflectAttributeValues(int theObject, ReflectedAttributes theAttributes, byte[] tag, LogicalTime theTime, EventRetractionHandle retractionHandle) {
         /*StringBuilder builder = new StringBuilder( "Reflection for object:" );
 
         builder.append( " handle=" + theObject );
@@ -185,36 +185,63 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
         log( builder.toString() );*/
     }
 
-    public void receiveInteraction( int interactionClass, ReceivedInteraction theInteraction, byte[] tag )
-    {
-        receiveInteraction( interactionClass, theInteraction, tag, null, null );
+    public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag) {
+        receiveInteraction(interactionClass, theInteraction, tag, null, null);
     }
 
-    public void receiveInteraction( int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle )
-    {
-        StringBuilder builder = new StringBuilder( "Interaction Received:" );
-
-        if(interactionClass == wejscieDoPrzychodniHandle){
-            try {
+    public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle) {
+        StringBuilder builder = new StringBuilder("Interaction Received:");
+        try {
+            if (interactionClass == wejscieDoPrzychodniHandle) {
                 int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
                 double godzina_wejscia = EncodingHelpers.decodeDouble(theInteraction.getValue(1));
-                builder.append("Przybył pacjent nr " + id_pacjenta + " , time=" + godzina_wejscia);
-            } catch (ArrayIndexOutOfBounds e) {
-                throw new RuntimeException(e);
+                builder.append("Przybyl pacjent nr " + id_pacjenta + " do Przychodni, time=" + godzina_wejscia);
+                MainFederateAmbassador.iloscPacjentowWRejestracji++;
+                MainFederateAmbassador.zakonczeniaCzas=convertTime(theTime);
+            } else if (interactionClass == wejscieDoLekarzaHandle) {
+                int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
+                double godzina_wejscia = EncodingHelpers.decodeDouble(theInteraction.getValue(1));
+                builder.append("Przybyl pacjent nr " + id_pacjenta + " do Lekarza, time=" + godzina_wejscia);
+                MainFederateAmbassador.dostepniLekarze--;
+                MainFederateAmbassador.iloscPacjentowWPoczekalni--;
+                MainFederateAmbassador.zakonczeniaCzas=convertTime(theTime);
+            } else if (interactionClass == przeniesieniePacjentaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1)) == 1) {
+                int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
+                builder.append("Przybyl pacjent nr " + id_pacjenta + " do Poczekalni");
+                MainFederateAmbassador.iloscPacjentowWRejestracji--;
+                MainFederateAmbassador.iloscPacjentowWPoczekalni++;
+                MainFederateAmbassador.zakonczeniaCzas=convertTime(theTime);
+            } else if (interactionClass == przeniesieniePacjentaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1)) == 3) {
+                int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
+                builder.append("Pacjent nr " + id_pacjenta + " przeniesiony do Gabinetu ");
+                MainFederateAmbassador.dostepneGabinety--;
+                MainFederateAmbassador.dostepniLekarze++;
+                MainFederateAmbassador.zakonczeniaCzas=convertTime(theTime);
+            } else if (interactionClass == przeniesieniePacjentaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1)) == 4) {
+                int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
+                builder.append("Przybyl pacjent nr " + id_pacjenta + " obsluzony przez lekarza");
+                MainFederateAmbassador.dostepniLekarze++;
+                MainFederateAmbassador.zakonczeniaCzas=convertTime(theTime);
+            } else if (interactionClass == przeniesieniePacjentaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1)) == 5) {
+                int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
+                builder.append("Przybyl pacjent nr " + id_pacjenta + " obsluzony w Gabinecie");
+                MainFederateAmbassador.dostepneGabinety++;
+                MainFederateAmbassador.zakonczeniaCzas=convertTime(theTime);
             }
+
+
+        } catch (ArrayIndexOutOfBounds e) {
+            throw new RuntimeException(e);
         }
-
-        log( builder.toString() );
+        log(builder.toString());
     }
 
-    public void removeObjectInstance( int theObject, byte[] userSuppliedTag )
-    {
-        log( "Object Removed: handle=" + theObject );
+    public void removeObjectInstance(int theObject, byte[] userSuppliedTag) {
+        log("Object Removed: handle=" + theObject);
     }
 
-    public void removeObjectInstance( int theObject, byte[] userSuppliedTag, LogicalTime theTime, EventRetractionHandle retractionHandle )
-    {
-        log( "Object Removed: handle=" + theObject );
+    public void removeObjectInstance(int theObject, byte[] userSuppliedTag, LogicalTime theTime, EventRetractionHandle retractionHandle) {
+        log("Object Removed: handle=" + theObject);
     }
 
     @Override

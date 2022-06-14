@@ -1,5 +1,6 @@
 package MSK.Lekarz;
 
+import MSK.Poczekalnia.PoczekalniaAmbassador;
 import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
 import hla.rti.jlc.RtiFactoryFactory;
@@ -17,8 +18,14 @@ public class LekarzFederate {
     public static final String READY_TO_RUN = "ReadyToRun";
     private RTIambassador rtiamb;
     private LekarzAmbassador fedamb;
-    public static int iloscWolnychLekarzy=5;
     private final double timeStep = 10.0;
+    Random r = new Random();
+    /***
+     * @value
+     * 3- wszedł do Gabinetu
+     * 4- nie wszedł do Gabinetu
+     */
+    protected int czyWszedlDoGabinetu;
 
 
     public void runFederate() throws RTIexception {
@@ -69,10 +76,13 @@ public class LekarzFederate {
 
         while (fedamb.running) {
             advanceTime(2*randomTime());
-            if(iloscWolnychLekarzy>0){
 
+            if(LekarzAmbassador.lista.size()>0){
+                    czyWszedlDoGabinetu = sendInteraction(fedamb.federateTime + fedamb.federateLookahead,LekarzAmbassador.lista.get(0));
+                    if(czyWszedlDoGabinetu==3) log("Pacjent nr " + LekarzAmbassador.lista.get(0) + " uda sie do gabinetu");
+                    else log("Pacjent nr " + LekarzAmbassador.lista.get(0) + " zostal obsluzony");
+                    LekarzAmbassador.lista.remove(0);
             }
-
             rtiamb.tick();
         }
 
@@ -129,28 +139,42 @@ public class LekarzFederate {
         }
     }
 
-    private void sendInteraction(double timeStep,int id_pacjenta) throws RTIexception {
-        LogicalTime time = convertTime(timeStep);
+    private int sendInteraction(double timeStep,int id_pacjenta) throws RTIexception {
 
+        LogicalTime time = convertTime(timeStep);
         SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
         int przeniesienieHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Przeniesienie_pacjenta" );
         int idPacjentaHandlePar = rtiamb.getParameterHandle("id_pacjenta",przeniesienieHandle);
         int miejsceHandlePar = rtiamb.getParameterHandle("miejsce_koncowe",przeniesienieHandle);
         byte[] idPacjenta = EncodingHelpers.encodeInt(id_pacjenta);
-        byte[] miejsce_koncowe = EncodingHelpers.encodeInt(1);
+        byte[] miejsce_koncowe;
+        int temp;
+        if(r.nextDouble()>0.6){
+            temp=3;
+            miejsce_koncowe = EncodingHelpers.encodeInt(temp);
+        }else{
+            temp=4;
+            miejsce_koncowe = EncodingHelpers.encodeInt(temp);
+        }
+
         parameters.add(idPacjentaHandlePar,idPacjenta);
         parameters.add(miejsceHandlePar,miejsce_koncowe);
         rtiamb.sendInteraction(przeniesienieHandle,parameters,"tag".getBytes(),time);
-        log("Przeniesiono pacjenta nr " + id_pacjenta + "do poczekalni");
+        log("Przeniesiono pacjenta nr " + id_pacjenta + " do Gabinetu");
 
+        return temp;
     }
 
     private void publishAndSubscribe() throws RTIexception {
 
+        int wejscieDoLekarzaHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Wejscie_do_lekarza" );
+        fedamb.wejscieDoLekarzaHlaHandle = wejscieDoLekarzaHandle;
+        rtiamb.subscribeInteractionClass(wejscieDoLekarzaHandle);
+
         int przeniesienieHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Przeniesienie_pacjenta" );
         fedamb.przeniesienieHlaHandle = przeniesienieHandle;
-        rtiamb.publishInteractionClass(przeniesienieHandle);
         rtiamb.subscribeInteractionClass(przeniesienieHandle);
+        rtiamb.publishInteractionClass(przeniesienieHandle);
     }
 
     private void advanceTime( double timestep ) throws RTIexception
