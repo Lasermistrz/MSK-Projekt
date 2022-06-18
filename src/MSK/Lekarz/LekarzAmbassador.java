@@ -1,6 +1,7 @@
 package MSK.Lekarz;
 
 import MSK.GUI.MainFederate;
+import MSK.Parameters;
 import MSK.Poczekalnia.PoczekalniaAmbassador;
 import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
@@ -22,7 +23,7 @@ public class LekarzAmbassador implements FederateAmbassador {
     protected int wejscieDoLekarzaHlaHandle;
     protected int przeniesienieHlaHandle;
     public static ArrayList<Integer> lista = new ArrayList<>();
-    public static int iloscWolnychGabinetow=5;
+    public static int iloscWolnychGabinetow= Parameters.iloscGabinetow;
 
     private double convertTime( LogicalTime logicalTime )
     {
@@ -155,6 +156,9 @@ public class LekarzAmbassador implements FederateAmbassador {
                 double godzina = EncodingHelpers.decodeDouble(theInteraction.getValue(1));
                 builder.append("Dodano Pacjenta nr " + id_pacjenta + " do lekarza o godzinie " + godzina);
                 log( builder.toString() );
+            }
+            else if(interactionClass == przeniesienieHlaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1))==5){
+                LekarzAmbassador.iloscWolnychGabinetow++;
             }
         } catch (ArrayIndexOutOfBounds e) {
             throw new RuntimeException(e);

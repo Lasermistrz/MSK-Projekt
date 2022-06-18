@@ -1,5 +1,6 @@
 package MSK.Pacjent;
 
+import MSK.Parameters;
 import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
 import hla.rti.jlc.RtiFactoryFactory;
@@ -78,8 +79,8 @@ public class PacjentFederate {
         publishAndSubscribe();
 
         while (fedamb.running) {
-            if (fedamb.federateTime < 465){
-            advanceTime(3*randomTime());
+            if (fedamb.federateTime < 480-Parameters.przyplywPacjentow*5){
+            advanceTime(Parameters.przyplywPacjentow *randomTime());
             registerPacjentObject(fedamb.federateTime + fedamb.federateLookahead);
             sendInteraction(fedamb.federateTime + fedamb.federateLookahead);
             rtiamb.tick();

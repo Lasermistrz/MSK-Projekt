@@ -77,9 +77,12 @@ public class LekarzFederate {
         while (fedamb.running) {
             advanceTime(2*randomTime());
 
-            if(LekarzAmbassador.lista.size()>0){
+            if(LekarzAmbassador.lista.size()>0&&LekarzAmbassador.iloscWolnychGabinetow>0){
                     czyWszedlDoGabinetu = sendInteraction(fedamb.federateTime + fedamb.federateLookahead,LekarzAmbassador.lista.get(0));
-                    if(czyWszedlDoGabinetu==3) log("Pacjent nr " + LekarzAmbassador.lista.get(0) + " uda sie do gabinetu");
+                    if(czyWszedlDoGabinetu==3) {
+                        log("Pacjent nr " + LekarzAmbassador.lista.get(0) + " uda sie do gabinetu");
+                        LekarzAmbassador.iloscWolnychGabinetow--;
+                    }
                     else log("Pacjent nr " + LekarzAmbassador.lista.get(0) + " zostal obsluzony");
                     LekarzAmbassador.lista.remove(0);
             }

@@ -1,6 +1,7 @@
 package MSK.Rejestracja;
 
 
+import MSK.Parameters;
 import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
 import hla.rti.jlc.RtiFactoryFactory;
@@ -18,7 +19,7 @@ public class RejestracjaFederate {
     protected int rejestracjaHlaHandle;
     private RTIambassador rtiamb;
     private RejestracjaAmbassador fedamb;
-    public static int iloscWolnychMiejscWPoczekalni = 30;
+    public static int iloscWolnychMiejscWPoczekalni = Parameters.pojemnoscPoczekalni;
     private final double timeStep = 10.0;
 
 
@@ -66,7 +67,7 @@ public class RejestracjaFederate {
             advanceTime(randomTime());
 
             //updateHLAObject(fedamb.federateTime + fedamb.federateLookahead);
-            if (iloscWolnychMiejscWPoczekalni > 0 && RejestracjaAmbassador.lista.size() > 0) {
+            if (iloscWolnychMiejscWPoczekalni > 0 && RejestracjaAmbassador.lista.size() > 0 && fedamb.federateTime<480) {
                 log(RejestracjaAmbassador.lista.get(0) + " pacjent");
                 sendInteraction(fedamb.federateTime + fedamb.federateLookahead, RejestracjaAmbassador.lista.get(0));
                 RejestracjaAmbassador.lista.remove(0);

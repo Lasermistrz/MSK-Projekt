@@ -2,6 +2,7 @@ package MSK.Poczekalnia;
 
 import MSK.GUI.MainFederate;
 import MSK.Pacjent.PacjentFederate;
+import MSK.Parameters;
 import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
 import org.portico.impl.hla13.types.DoubleTime;
@@ -21,7 +22,7 @@ public class PoczekalniaAmbassador implements FederateAmbassador {
     protected boolean isReadyToRun       = false;
     protected boolean running 			 = true;
     protected int przeniesienieHlaHandle;
-    public static int iloscWolnychLekarzy=5;
+    public static int iloscWolnychLekarzy= Parameters.iloscLekarzy;
     protected int wejscieDoLekarzaHlaHandle;
     public static ArrayList<Integer> lista = new ArrayList<>();
 

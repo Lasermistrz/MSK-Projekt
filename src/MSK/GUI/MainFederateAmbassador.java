@@ -1,5 +1,6 @@
 package MSK.GUI;
 
+import MSK.Parameters;
 import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
 import hla.rti1516.jlc.NullFederateAmbassador;
@@ -24,8 +25,8 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
     /////////////////////////    Zmienne do GUI    ////////////////////////////
     public static double aktualnyCzas = 0.0;
     public static double zakonczeniaCzas = 0.0;
-    public static int dostepniLekarze = 5;
-    public static int dostepneGabinety = 5;
+    public static int dostepniLekarze = Parameters.iloscLekarzy;
+    public static int dostepneGabinety = Parameters.iloscGabinetow;
     public static int iloscPacjentowWRejestracji = 0;
     public static int iloscPacjentowWPoczekalni = 0;
 

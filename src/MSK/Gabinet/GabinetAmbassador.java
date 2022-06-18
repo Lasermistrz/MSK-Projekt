@@ -20,7 +20,6 @@ public class GabinetAmbassador implements FederateAmbassador {
     protected boolean isAnnounced        = false;
     protected boolean isReadyToRun       = false;
     protected boolean running 			 = true;
-    protected int wejscieDoLekarzaHlaHandle;
     protected int przeniesienieHlaHandle;
     public static ArrayList<Integer> lista = new ArrayList<>();
 
