@@ -332,19 +332,19 @@ public class PacjentAmbassador implements hla.rti1516e.FederateAmbassador {
     }
 
     @Override
-    public void timeRegulationEnabled(hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void timeRegulationEnabled(LogicalTime logicalTime) throws FederateInternalError {
         this.federateTime = ((HLAfloat64Time)logicalTime).getValue();
         this.isRegulating = true;
     }
 
     @Override
-    public void timeConstrainedEnabled(hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void timeConstrainedEnabled(LogicalTime logicalTime) throws FederateInternalError {
         this.federateTime = ((HLAfloat64Time)logicalTime).getValue();
         this.isConstrained = true;
     }
 
     @Override
-    public void timeAdvanceGrant(hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void timeAdvanceGrant(LogicalTime logicalTime) throws FederateInternalError {
         this.federateTime = ((HLAfloat64Time)logicalTime).getValue();
         this.isAdvancing = false;
     }
