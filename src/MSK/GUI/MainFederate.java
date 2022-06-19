@@ -1,7 +1,12 @@
 package MSK.GUI;
 
-import hla.rti.*;
-import hla.rti.jlc.RtiFactoryFactory;
+import hla.rti1516e.*;
+import hla.rti1516e.encoding.EncoderFactory;
+import hla.rti1516e.exceptions.*;
+import hla.rti1516e.time.HLAfloat64Interval;
+import hla.rti1516e.time.HLAfloat64Time;
+import hla.rti1516e.time.HLAfloat64TimeFactory;
+import hla.rti1516e.time.HLAinteger64Time;
 import org.portico.impl.hla13.types.DoubleTime;
 import org.portico.impl.hla13.types.DoubleTimeInterval;
 
@@ -13,11 +18,25 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URL;
 
 public class MainFederate {
-    public static final int ITERATIONS =1000;
+    public static final int ITERATIONS =800;
     public static final String READY_TO_RUN = "ReadyToRun";
     private final double timeStep = 1.0;
+
+
+    private HLAfloat64TimeFactory timeFactory; // set when we join
+    protected EncoderFactory encoderFactory;     // set when we join
+    protected static InteractionClassHandle przeniesieniePacjentaHandle;
+    protected static ParameterHandle idPacjentaPrzeniesienieHandle;
+    protected static ParameterHandle miejsceKoncoweHandle;
+    protected static InteractionClassHandle wejscieDoLekarza;
+    protected static ParameterHandle idPacjentaLekarzHandle;
+    protected static ParameterHandle godzinaWejsciaDoLekarzaHandle;
+    protected static InteractionClassHandle wejscieDoPrzychodni;
+    protected static ParameterHandle idPacjentaPrzychodniaHandle;
+    protected static ParameterHandle godzinaWejsciaHandle;
 
     private RTIambassador rtiamb;
     private MainFederateAmbassador fedamb;
@@ -57,21 +76,7 @@ public class MainFederate {
             e.printStackTrace();
         }
     }
-
-    private LogicalTime convertTime(double time )
-    {
-        // PORTICO SPECIFIC!!
-        return new DoubleTime( time );
-    }
-
-    private LogicalTimeInterval convertInterval(double time )
-    {
-        // PORTICO SPECIFIC!!
-        return new DoubleTimeInterval( time );
-    }
-
-    public void runFederate( String federateName ) throws RTIexception
-    {
+    public void runFederate( String federateName ) throws RTIexception, hla.rti1516e.exceptions.RTIinternalError, CallNotAllowedFromWithinCallback, AlreadyConnected, InvalidLocalSettingsDesignator, ConnectionFailed, UnsupportedCallbackModel, MalformedURLException {
         frame = new JFrame();
         frame.setTitle("MSK");
         mainPanel = new JPanel();
@@ -145,13 +150,20 @@ public class MainFederate {
             }
         });
 
-        rtiamb = RtiFactoryFactory.getRtiFactory().createRtiAmbassador();
+        rtiamb = hla.rti1516e.RtiFactoryFactory.getRtiFactory().getRtiAmbassador();
+        encoderFactory = RtiFactoryFactory.getRtiFactory().getEncoderFactory();
+
+        log( "Connecting..." );
+        fedamb = new MainFederateAmbassador( this );
+        rtiamb.connect( fedamb, CallbackModel.HLA_EVOKED );
 
         try
         {
-            File fom = new File( "msk.fed" );
-            rtiamb.createFederationExecution( "ExampleFederation",
-                    fom.toURI().toURL() );
+            URL[] modules = new URL[]{
+                    (new File("foms/msk.xml")).toURI().toURL()
+            };
+
+            rtiamb.createFederationExecution( "ExampleFederation", modules );
             log( "Created Federation" );
         }
         catch( FederationExecutionAlreadyExists exists )
@@ -160,20 +172,28 @@ public class MainFederate {
         }
         catch( MalformedURLException urle )
         {
-            log( "Exception processing fom: " + urle.getMessage() );
+            log( "Exception loading one of the FOM modules from disk: " + urle.getMessage() );
             urle.printStackTrace();
             return;
         }
 
-        fedamb = new MainFederateAmbassador();
-        rtiamb.joinFederationExecution( federateName, "ExampleFederation", fedamb);
+        URL[] joinModules = new URL[]{
+                (new File("foms/msk.xml")).toURI().toURL()
+        };
+
+        rtiamb.joinFederationExecution( federateName,            // name for the federate
+                "ExampleFederateType",   // federate type
+                "ExampleFederation",     // name of federation
+                joinModules );           // modules we want to add
+
         log( "Joined Federation as " + federateName );
+        this.timeFactory = (HLAfloat64TimeFactory)rtiamb.getTimeFactory();
 
         rtiamb.registerFederationSynchronizationPoint( READY_TO_RUN, null );
 
-        while(!fedamb.isAnnounced)
+        while( fedamb.isAnnounced == false )
         {
-            rtiamb.tick();
+            rtiamb.evokeMultipleCallbacks( 0.1, 0.2 );
         }
 
         waitForUser();
@@ -182,9 +202,9 @@ public class MainFederate {
         log( "Achieved sync point: " +READY_TO_RUN+ ", waiting for federation..." );
         while(!fedamb.isReadyToRun)
         {
-            rtiamb.tick();
+            rtiamb.evokeMultipleCallbacks( 0.1, 0.2 );
         }
-
+        log( "Achieved sync point: " +READY_TO_RUN+ ", waiting for federation..." );
         enableTimePolicy();
         log( "Time Policy Enabled" );
 
@@ -205,9 +225,9 @@ public class MainFederate {
 
 
             // 9.3 request a time advance and wait until we get it
-            double timeToAdvance = fedamb.federateTime + timeStep;
+            //double timeToAdvance = fedamb.federateTime + timeStep;
 
-            advanceTime(timeToAdvance);
+            advanceTime(timeStep);
             log( "Time Advanced to " + fedamb.federateTime );
             SetTimeSimulation(fedamb.federateTime);
             SetEndTimeSimulation(MainFederateAmbassador.zakonczeniaCzas);
@@ -216,7 +236,7 @@ public class MainFederate {
             setTextDoctors(MainFederateAmbassador.dostepniLekarze);
             setTextGabinets(MainFederateAmbassador.dostepneGabinety);
 
-            rtiamb.tick();
+            rtiamb.evokeMultipleCallbacks( 0.1, 0.2 );
 
 
         }
@@ -251,54 +271,53 @@ public class MainFederate {
     }
 
     private void publishAndSubscribe() throws RTIexception {
-        int wejscieDoPrzychodniHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Wejscie_do_przychodni" );
-        fedamb.wejscieDoPrzychodniHandle = wejscieDoPrzychodniHandle;
-        rtiamb.subscribeInteractionClass( wejscieDoPrzychodniHandle );
+        wejscieDoPrzychodni = rtiamb.getInteractionClassHandle( "InteractionRoot.Wejscie_do_przychodni" );
+        fedamb.wejscieDoPrzychodniHandle = wejscieDoPrzychodni;
+        idPacjentaPrzychodniaHandle = rtiamb.getParameterHandle(wejscieDoPrzychodni,"id_pacjenta");
+        godzinaWejsciaHandle = rtiamb.getParameterHandle(wejscieDoPrzychodni,"godzina_wejscia");
+        rtiamb.subscribeInteractionClass( wejscieDoPrzychodni );
 
-        int przeniesieniePacjentaHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Przeniesienie_pacjenta" );
+        przeniesieniePacjentaHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Przeniesienie_pacjenta" );
         fedamb.przeniesieniePacjentaHandle = przeniesieniePacjentaHandle;
+        idPacjentaPrzeniesienieHandle = rtiamb.getParameterHandle(przeniesieniePacjentaHandle,"id_pacjenta");
+        miejsceKoncoweHandle = rtiamb.getParameterHandle(przeniesieniePacjentaHandle,"miejsce_koncowe");
         rtiamb.subscribeInteractionClass( przeniesieniePacjentaHandle );
 
-        int wejscieDoLkearzaHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Wejscie_do_lekarza" );
-        fedamb.wejscieDoLekarzaHandle = wejscieDoLkearzaHandle;
-        rtiamb.subscribeInteractionClass( wejscieDoLkearzaHandle );
+        wejscieDoLekarza = rtiamb.getInteractionClassHandle( "InteractionRoot.Wejscie_do_lekarza" );
+        fedamb.wejscieDoLekarzaHandle = wejscieDoLekarza;
+        idPacjentaLekarzHandle = rtiamb.getParameterHandle(wejscieDoLekarza,"id_pacjenta");
+        godzinaWejsciaDoLekarzaHandle = rtiamb.getParameterHandle(wejscieDoLekarza,"godzina_wejscia_do_lekarza");
+        rtiamb.subscribeInteractionClass( wejscieDoLekarza );
     }
 
     private void enableTimePolicy() throws RTIexception
     {
-        LogicalTime currentTime = convertTime( fedamb.federateTime );
-        LogicalTimeInterval lookahead = convertInterval( fedamb.federateLookahead );
+        HLAfloat64Interval lookahead = timeFactory.makeInterval( fedamb.federateLookahead );
 
+        this.rtiamb.enableTimeRegulation( lookahead );
 
-        this.rtiamb.enableTimeRegulation( currentTime, lookahead );
-
-        while(!fedamb.isRegulating)
+        while( fedamb.isRegulating == false )
         {
-            rtiamb.tick();
+            rtiamb.evokeMultipleCallbacks( 0.1, 0.2 );
         }
-
         this.rtiamb.enableTimeConstrained();
 
-        while(!fedamb.isConstrained)
+        while( fedamb.isConstrained == false )
         {
-            rtiamb.tick();
+            rtiamb.evokeMultipleCallbacks( 0.1, 0.2 );
         }
     }
     private void advanceTime( double timeToAdvance ) throws RTIexception {
         fedamb.isAdvancing = true;
-        LogicalTime newTime = convertTime( timeToAdvance );
-        rtiamb.timeAdvanceRequest( newTime );
+        HLAfloat64Time time = timeFactory.makeTime( fedamb.federateTime + timeToAdvance );
+        rtiamb.timeAdvanceRequest( time );
 
         while( fedamb.isAdvancing )
         {
-            rtiamb.tick();
+            rtiamb.evokeMultipleCallbacks( 0.1, 0.2 );
         }
     }
 
-    private void deleteObject( int handle ) throws RTIexception
-    {
-        rtiamb.deleteObjectInstance( handle, generateTag() );
-    }
 
     private double getLbts()
     {
@@ -324,7 +343,7 @@ public class MainFederate {
         {
             new MainFederate().runFederate( federateName );
         }
-        catch( RTIexception rtie )
+        catch(RTIexception | MalformedURLException rtie )
         {
             rtie.printStackTrace();
         }
@@ -352,6 +371,7 @@ public class MainFederate {
     public void setTextGabinets(int number){
         textGabinets.setText(String.valueOf(number));
     }
+
 }
 
 

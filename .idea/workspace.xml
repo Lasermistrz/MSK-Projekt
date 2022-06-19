@@ -5,17 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d909859d-a9b8-483a-a0d4-fd471959c748" name="Changes" comment="Pacjent wysyła Czy_otwarte do Głównego federata (jako nauka komunikacji)">
-      <change afterPath="$PROJECT_DIR$/foms/msk.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/MSK/Parameters.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/portico.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/portico.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/msk.fed" beforeDir="false" afterPath="$PROJECT_DIR$/msk.fed" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/GUI/MainFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/GUI/MainFederate.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MSK/GUI/MainFederateAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/GUI/MainFederateAmbassador.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MSK/Gabinet/GabinetAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Gabinet/GabinetAmbassador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Gabinet/GabinetFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Gabinet/GabinetFederate.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MSK/Lekarz/LekarzAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Lekarz/LekarzAmbassador.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MSK/Lekarz/LekarzFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Lekarz/LekarzFederate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentAmbassador.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentFederate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Parameters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Parameters.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MSK/Poczekalnia/PoczekalniaAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Poczekalnia/PoczekalniaAmbassador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Poczekalnia/PoczekalniaFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Poczekalnia/PoczekalniaFederate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaAmbassador.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaFederate.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,24 +49,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "jdk.selected.JAVA_MODULE": "openjdk-18",
-    "last_opened_file_path": "D:/IdeaProjects/Symulacje/MSK-Projekt-master",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "File.Encoding"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-18&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/IdeaProjects/Symulacje/MSK-Projekt-master&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;File.Encoding&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\IdeaProjects\Symulacje\MSK-Projekt\src\MSK\guiandstatistics" />
@@ -152,11 +156,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.RejestracjaFederate" />
-        <item itemvalue="Application.PoczekalniaFederate" />
-        <item itemvalue="Application.PacjentFederate" />
-        <item itemvalue="Application.LekarzFederate" />
         <item itemvalue="Application.GabinetFederate" />
+        <item itemvalue="Application.LekarzFederate" />
+        <item itemvalue="Application.PoczekalniaFederate" />
+        <item itemvalue="Application.RejestracjaFederate" />
+        <item itemvalue="Application.PacjentFederate" />
       </list>
     </recent_temporary>
   </component>
@@ -188,7 +192,11 @@
       <workItem from="1655214865143" duration="5500000" />
       <workItem from="1655476338911" duration="676000" />
       <workItem from="1655477112696" duration="1869000" />
-      <workItem from="1655551116297" duration="2221000" />
+      <workItem from="1655551116297" duration="8644000" />
+      <workItem from="1655563367969" duration="1096000" />
+      <workItem from="1655571707934" duration="4472000" />
+      <workItem from="1655622864888" duration="5664000" />
+      <workItem from="1655634665986" duration="10588000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <created>1654434945314</created>
@@ -225,32 +233,6 @@
     <MESSAGE value="Init" />
     <MESSAGE value="Pacjent wysyła Czy_otwarte do Głównego federata (jako nauka komunikacji)" />
     <option name="LAST_COMMIT_MESSAGE" value="Pacjent wysyła Czy_otwarte do Głównego federata (jako nauka komunikacji)" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaAmbassador.java</url>
-          <line>228</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaAmbassador.java</url>
-          <line>229</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaAmbassador.java</url>
-          <line>227</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaAmbassador.java</url>
-          <line>230</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

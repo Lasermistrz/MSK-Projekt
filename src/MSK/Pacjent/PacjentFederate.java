@@ -1,46 +1,56 @@
 package MSK.Pacjent;
 
 import MSK.Parameters;
-import hla.rti.*;
-import hla.rti.jlc.EncodingHelpers;
-import hla.rti.jlc.RtiFactoryFactory;
-import org.portico.impl.hla13.types.DoubleTime;
-import org.portico.impl.hla13.types.DoubleTimeInterval;
+import hla.rti.RTIinternalError;
+import hla.rti1516e.*;
+import hla.rti1516e.encoding.EncoderFactory;
+import hla.rti1516e.encoding.HLAfloat64BE;
+import hla.rti1516e.encoding.HLAinteger32BE;
+import hla.rti1516e.exceptions.FederationExecutionAlreadyExists;
+import hla.rti1516e.exceptions.RTIexception;
+import hla.rti1516e.time.HLAfloat64Interval;
+import hla.rti1516e.time.HLAfloat64Time;
+import hla.rti1516e.time.HLAfloat64TimeFactory;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
+import java.net.URL;
 import java.util.Random;
 
 public class PacjentFederate {
     public static final String READY_TO_RUN = "ReadyToRun";
     public static int idstatic=0;
-    public static int[] pacjentHlaHandle = new int[50000]; // maksymalna ilość przyjętych pacjentów
-    /***
-     * @value
-     * 0 = rejetracja
-     * 1 = poczekalnia
-     * 2 = lekarz
-     * 3 = gabinet
-     */
-
 
     private RTIambassador rtiamb;
     private PacjentAmbassador fedamb;
-    private final double timeStep = 10.0;
+    private final double timeStep = 1.0;
+    private HLAfloat64TimeFactory timeFactory; // set when we join
+    protected EncoderFactory encoderFactory;     // set when we join
+    protected static ObjectClassHandle pacjentHandle;
+    protected static AttributeHandle idPacjentaHandle;
+    protected static InteractionClassHandle wejscieHandle;
+    protected static ParameterHandle godzinaWejsciaHandle;
+    protected static ParameterHandle idPacjentaWejscieHandle;
 
-    public void runFederate() throws RTIexception {
-        rtiamb = RtiFactoryFactory.getRtiFactory().createRtiAmbassador();
+    public void runFederate(String federateName) throws RTIexception, MalformedURLException, RTIinternalError {
+        rtiamb = RtiFactoryFactory.getRtiFactory().getRtiAmbassador();
+        encoderFactory = RtiFactoryFactory.getRtiFactory().getEncoderFactory();
+
+        log( "Connecting..." );
+        fedamb = new PacjentAmbassador( this );
+        rtiamb.connect( fedamb, CallbackModel.HLA_EVOKED );
+
+        log( "Creating Federation..." );
 
         try
         {
-            File fom = new File( "msk.fed" );
-            rtiamb.createFederationExecution( "ExampleFederation",
-                    fom.toURI().toURL() );
+            URL[] modules = new URL[]{
+                    (new File("foms/msk.xml")).toURI().toURL()
+            };
+
+            rtiamb.createFederationExecution( "ExampleFederation", modules );
             log( "Created Federation" );
         }
         catch( FederationExecutionAlreadyExists exists )
@@ -49,20 +59,29 @@ public class PacjentFederate {
         }
         catch( MalformedURLException urle )
         {
-            log( "Exception processing fom: " + urle.getMessage() );
+            log( "Exception loading one of the FOM modules from disk: " + urle.getMessage() );
             urle.printStackTrace();
             return;
         }
 
-        fedamb = new PacjentAmbassador();
-        rtiamb.joinFederationExecution( "PacjentFederate", "ExampleFederation", fedamb );
-        log( "Joined Federation as PacjentFederate");
+        URL[] joinModules = new URL[]{
+                (new File("foms/msk.xml")).toURI().toURL()
+        };
+
+        rtiamb.joinFederationExecution( federateName,            // name for the federate
+                "ExampleFederateType",   // federate type
+                "ExampleFederation",     // name of federation
+                joinModules );           // modules we want to add
+
+        log( "Joined Federation as " + federateName );
+
+        this.timeFactory = (HLAfloat64TimeFactory)rtiamb.getTimeFactory();
 
         rtiamb.registerFederationSynchronizationPoint( READY_TO_RUN, null );
 
         while( fedamb.isAnnounced == false )
         {
-            rtiamb.tick();
+            rtiamb.evokeMultipleCallbacks( 0.1, 0.2 );
         }
 
         waitForUser();
@@ -71,7 +90,7 @@ public class PacjentFederate {
         log( "Achieved sync point: " +READY_TO_RUN+ ", waiting for federation..." );
         while( fedamb.isReadyToRun == false )
         {
-            rtiamb.tick();
+            rtiamb.evokeMultipleCallbacks( 0.1, 0.2 );
         }
 
         enableTimePolicy();
@@ -81,33 +100,15 @@ public class PacjentFederate {
         while (fedamb.running) {
             if (fedamb.federateTime < 480-Parameters.przyplywPacjentow*5){
             advanceTime(Parameters.przyplywPacjentow *randomTime());
-            registerPacjentObject(fedamb.federateTime + fedamb.federateLookahead);
             sendInteraction(fedamb.federateTime + fedamb.federateLookahead);
-            rtiamb.tick();
+            rtiamb.evokeMultipleCallbacks( 0.1, 0.2 );
            }else {
                 advanceTime(randomTime());
-                rtiamb.tick();
+                rtiamb.evokeMultipleCallbacks( 0.1, 0.2 );
             }
         }
 
     }
-
-    private void registerPacjentObject(double time) throws RTIexception {
-        int classHandleCreate = rtiamb.getObjectClassHandle("ObjectRoot.Pacjent");
-        pacjentHlaHandle[idstatic] = rtiamb.registerObjectInstance(classHandleCreate);
-
-        SuppliedAttributes attributes = RtiFactoryFactory.getRtiFactory().createSuppliedAttributes();
-        int classHandle = rtiamb.getObjectClass(pacjentHlaHandle[idstatic]);
-        int idHandle = rtiamb.getAttributeHandle( "id_pacjenta", classHandle );
-        byte[] idValue = EncodingHelpers.encodeInt(idstatic);
-
-        attributes.add(idHandle, idValue);
-        LogicalTime logicalTime = convertTime( time );
-        rtiamb.updateAttributeValues( pacjentHlaHandle[idstatic], attributes, "actualize pacjent".getBytes(), logicalTime );
-        log("Przybyl pacjent nr " + ByteBuffer.wrap(idValue).getInt());
-    }
-
-
 
     private void waitForUser()
     {
@@ -126,90 +127,66 @@ public class PacjentFederate {
 
     private void enableTimePolicy() throws RTIexception
     {
-        LogicalTime currentTime = convertTime( fedamb.federateTime );
-        LogicalTimeInterval lookahead = convertInterval( fedamb.federateLookahead );
+        HLAfloat64Interval lookahead = timeFactory.makeInterval( fedamb.federateLookahead );
 
-        this.rtiamb.enableTimeRegulation( currentTime, lookahead );
+        this.rtiamb.enableTimeRegulation( lookahead );
 
         while( fedamb.isRegulating == false )
         {
-            rtiamb.tick();
+            rtiamb.evokeMultipleCallbacks( 0.1, 0.2 );
         }
-
         this.rtiamb.enableTimeConstrained();
 
         while( fedamb.isConstrained == false )
         {
-            rtiamb.tick();
+            rtiamb.evokeMultipleCallbacks( 0.1, 0.2 );
         }
     }
 
     private void sendInteraction(double timeStep) throws RTIexception {
-        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
-        byte[] id_pacjenta = EncodingHelpers.encodeInt(idstatic);
-        byte[] godzina_wejscia = EncodingHelpers.encodeDouble(timeStep);
+        HLAfloat64Time time = timeFactory.makeTime(fedamb.federateTime + fedamb.federateLookahead);
+        ParameterHandleValueMap parameters = rtiamb.getParameterHandleValueMapFactory().create(0);
+        HLAinteger32BE idPacjenta = encoderFactory.createHLAinteger32BE(idstatic);
+        HLAfloat64BE godzina_wejscia = encoderFactory.createHLAfloat64BE(timeStep);
 
-        int interactionHandle = rtiamb.getInteractionClassHandle("InteractionRoot.Wejscie_do_przychodni");
-        int idpacjentaHandle = rtiamb.getParameterHandle( "id_pacjenta", interactionHandle );
-        int godzinawejsciaHandle = rtiamb.getParameterHandle( "godzina_wejscia", interactionHandle );
+        parameters.put(idPacjentaWejscieHandle,idPacjenta.toByteArray());
+        parameters.put(godzinaWejsciaHandle,godzina_wejscia.toByteArray());
 
-        parameters.add(idpacjentaHandle,id_pacjenta );
-        parameters.add(godzinawejsciaHandle,godzina_wejscia );
-        LogicalTime time = convertTime( timeStep );
-        rtiamb.sendInteraction( interactionHandle, parameters, "tag".getBytes(), time );
+        rtiamb.sendInteraction( wejscieHandle, parameters, "tag".getBytes(), time );
+        log("Przybyl pacjent nr " + idstatic);
         //log("Send interaction ");
         idstatic++;
     }
 
-    private void publishAndSubscribe() throws RTIexception {
-        int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.Pacjent");
-        int idHandle    = rtiamb.getAttributeHandle( "id_pacjenta", classHandle );
+    private void publishAndSubscribe() throws RTIexception, RTIinternalError {
+        pacjentHandle = rtiamb.getObjectClassHandle("ObjectRoot.Pacjent");
+        idPacjentaHandle = rtiamb.getAttributeHandle( pacjentHandle,"id_pacjenta" );
 
-        AttributeHandleSet attributes = RtiFactoryFactory.getRtiFactory().createAttributeHandleSet();
-        attributes.add( idHandle );
 
-        rtiamb.publishObjectClass(classHandle, attributes);
-       // rtiamb.subscribeObjectClassAttributes(classHandle, attributes);
-
-        int wejscieHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Wejscie_do_przychodni" );
+        wejscieHandle = rtiamb.getInteractionClassHandle( "InteractionRoot.Wejscie_do_przychodni" );
         fedamb.wejscieHandle = wejscieHandle;
+        godzinaWejsciaHandle = rtiamb.getParameterHandle(wejscieHandle,"godzina_wejscia");
+        fedamb.godzinaWejsciaHandle = godzinaWejsciaHandle;
+        idPacjentaWejscieHandle = rtiamb.getParameterHandle(wejscieHandle,"id_pacjenta");
+        fedamb.idPacjentaWejscieHandle = idPacjentaWejscieHandle;
         rtiamb.publishInteractionClass(wejscieHandle);
     }
 
     private void advanceTime( double timestep ) throws RTIexception
     {
-        //log("requesting time advance for: " + timestep);
-
-        // request the advance
         fedamb.isAdvancing = true;
-        LogicalTime newTime = convertTime( fedamb.federateTime + timestep );
-        rtiamb.timeAdvanceRequest( newTime );
+        HLAfloat64Time time = timeFactory.makeTime( fedamb.federateTime + timestep );
+        rtiamb.timeAdvanceRequest( time );
+
         while( fedamb.isAdvancing )
         {
-            rtiamb.tick();
+            rtiamb.evokeMultipleCallbacks( 0.1, 0.2 );
         }
-        fedamb.federateTime +=timestep;
-        //log("Pacjent time: " + fedamb.federateTime);
     }
 
     private double randomTime() {
         Random r = new Random();
         return 1 +(4 * r.nextDouble());
-    }
-
-    private LogicalTime convertTime( double time )
-    {
-        // PORTICO SPECIFIC!!
-        return new DoubleTime( time );
-    }
-
-    /**
-     * Same as for {@link #convertTime(double)}
-     */
-    private LogicalTimeInterval convertInterval( double time )
-    {
-        // PORTICO SPECIFIC!!
-        return new DoubleTimeInterval( time );
     }
 
     private void log( String message )
@@ -219,8 +196,8 @@ public class PacjentFederate {
 
     public static void main(String[] args) {
         try {
-            new PacjentFederate().runFederate();
-        } catch (RTIexception rtIexception) {
+            new PacjentFederate().runFederate("PacjentFederate");
+        } catch (RTIexception | MalformedURLException | RTIinternalError rtIexception) {
             rtIexception.printStackTrace();
         }
     }

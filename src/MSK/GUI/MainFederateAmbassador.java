@@ -1,12 +1,17 @@
 package MSK.GUI;
 
 import MSK.Parameters;
-import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
-import hla.rti1516.jlc.NullFederateAmbassador;
-import org.portico.impl.hla13.types.DoubleTime;
+import hla.rti1516e.*;
+import hla.rti1516e.exceptions.FederateInternalError;
+import hla.rti1516e.exceptions.InvalidLogicalTime;
+import hla.rti1516e.time.HLAfloat64Time;
+import org.portico.impl.hla1516e.types.time.DoubleTime;
 
-public class MainFederateAmbassador extends NullFederateAmbassador implements FederateAmbassador {
+import java.util.Set;
+
+public class MainFederateAmbassador extends NullFederateAmbassador implements hla.rti1516e.FederateAmbassador {
+    private MainFederate federate;
     protected double federateTime = 0.0;
     protected double federateLookahead = 1.0;
 
@@ -18,9 +23,9 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
     protected boolean isReadyToRun = false;
 
     protected boolean running = true;
-    protected int wejscieDoPrzychodniHandle;
-    protected int przeniesieniePacjentaHandle;
-    protected int wejscieDoLekarzaHandle;
+    protected InteractionClassHandle wejscieDoPrzychodniHandle;
+    protected InteractionClassHandle przeniesieniePacjentaHandle;
+    protected InteractionClassHandle wejscieDoLekarzaHandle;
 
     /////////////////////////    Zmienne do GUI    ////////////////////////////
     public static double aktualnyCzas = 0.0;
@@ -30,12 +35,13 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
     public static int iloscPacjentowWRejestracji = 0;
     public static int iloscPacjentowWPoczekalni = 0;
 
-    public MainFederateAmbassador() {
+    public MainFederateAmbassador(MainFederate fed) {
+        this.federate=fed;
     }
 
-    private double convertTime(LogicalTime logicalTime) {
+    private double convertTime(LogicalTime logicalTime) throws InvalidLogicalTime {
         // PORTICO SPECIFIC!!
-        return ((DoubleTime) logicalTime).getTime();
+        return DoubleTime.fromTime(logicalTime);
     }
 
     private void log(String message) {
@@ -46,14 +52,36 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
         log("Failed to register sync point: " + label);
     }
 
+    @Override
+    public void connectionLost(String s) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void reportFederationExecutions(FederationExecutionInformationSet federationExecutionInformationSet) throws FederateInternalError {
+
+    }
+
     public void synchronizationPointRegistrationSucceeded(String label) {
         log("Successfully registered sync point: " + label);
+    }
+
+    @Override
+    public void synchronizationPointRegistrationFailed(String s, SynchronizationPointFailureReason synchronizationPointFailureReason) throws hla.rti1516e.exceptions.FederateInternalError {
+
     }
 
     public void announceSynchronizationPoint(String label, byte[] tag) {
         log("Synchronization point announced: " + label);
         if (label.equals(MainFederate.READY_TO_RUN))
             this.isAnnounced = true;
+    }
+
+    @Override
+    public void federationSynchronized(String s, hla.rti1516e.FederateHandleSet federateHandleSet) throws hla.rti1516e.exceptions.FederateInternalError {
+        log("Federation Synchronized: " + s);
+        if (s.equals(MainFederate.READY_TO_RUN))
+            this.isReadyToRun = true;
     }
 
     public void federationSynchronized(String label) {
@@ -68,12 +96,22 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
     }
 
     @Override
+    public void initiateFederateSave(String s, hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
     public void federationSaved() {
 
     }
 
     @Override
-    public void federationNotSaved() throws FederateInternalError {
+    public void federationNotSaved(SaveFailureReason saveFailureReason) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void federationSaveStatusResponse(FederateHandleSaveStatusPair[] federateHandleSaveStatusPairs) throws hla.rti1516e.exceptions.FederateInternalError {
 
     }
 
@@ -83,17 +121,12 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
     }
 
     @Override
-    public void requestFederationRestoreFailed(String s, String s1) throws FederateInternalError {
-
-    }
-
-    @Override
     public void federationRestoreBegun() {
 
     }
 
     @Override
-    public void initiateFederateRestore(String s, int i) throws SpecifiedSaveLabelDoesNotExist, CouldNotRestore, FederateInternalError {
+    public void initiateFederateRestore(String s, String s1, FederateHandle federateHandle) throws hla.rti1516e.exceptions.FederateInternalError {
 
     }
 
@@ -103,31 +136,304 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
     }
 
     @Override
-    public void federationNotRestored() throws FederateInternalError {
+    public void federationNotRestored(RestoreFailureReason restoreFailureReason) throws hla.rti1516e.exceptions.FederateInternalError {
 
     }
 
     @Override
-    public void startRegistrationForObjectClass(int i) throws ObjectClassNotPublished, FederateInternalError {
+    public void federationRestoreStatusResponse(FederateRestoreStatus[] federateRestoreStatuses) throws hla.rti1516e.exceptions.FederateInternalError {
 
     }
 
     @Override
-    public void stopRegistrationForObjectClass(int i) throws ObjectClassNotPublished, FederateInternalError {
+    public void startRegistrationForObjectClass(ObjectClassHandle objectClassHandle) throws hla.rti1516e.exceptions.FederateInternalError {
 
     }
 
     @Override
-    public void turnInteractionsOn(int i) throws InteractionClassNotPublished, FederateInternalError {
+    public void stopRegistrationForObjectClass(ObjectClassHandle objectClassHandle) throws hla.rti1516e.exceptions.FederateInternalError {
 
     }
 
     @Override
-    public void turnInteractionsOff(int i) throws InteractionClassNotPublished, FederateInternalError {
+    public void turnInteractionsOn(InteractionClassHandle interactionClassHandle) throws hla.rti1516e.exceptions.FederateInternalError {
 
     }
 
-    public void timeRegulationEnabled(LogicalTime theFederateTime) {
+    @Override
+    public void turnInteractionsOff(InteractionClassHandle interactionClassHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void multipleObjectInstanceNameReservationSucceeded(Set<String> set) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void multipleObjectInstanceNameReservationFailed(Set<String> set) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void discoverObjectInstance(ObjectInstanceHandle objectInstanceHandle, ObjectClassHandle objectClassHandle, String s) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void discoverObjectInstance(ObjectInstanceHandle objectInstanceHandle, ObjectClassHandle objectClassHandle, String s, FederateHandle federateHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void reflectAttributeValues(ObjectInstanceHandle objectInstanceHandle, AttributeHandleValueMap attributeHandleValueMap, byte[] bytes, OrderType orderType, TransportationTypeHandle transportationTypeHandle, SupplementalReflectInfo supplementalReflectInfo) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void reflectAttributeValues(ObjectInstanceHandle objectInstanceHandle, AttributeHandleValueMap attributeHandleValueMap, byte[] bytes, OrderType orderType, TransportationTypeHandle transportationTypeHandle, hla.rti1516e.LogicalTime logicalTime, OrderType orderType1, SupplementalReflectInfo supplementalReflectInfo) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void reflectAttributeValues(ObjectInstanceHandle objectInstanceHandle, AttributeHandleValueMap attributeHandleValueMap, byte[] bytes, OrderType orderType, TransportationTypeHandle transportationTypeHandle, hla.rti1516e.LogicalTime logicalTime, OrderType orderType1, MessageRetractionHandle messageRetractionHandle, SupplementalReflectInfo supplementalReflectInfo) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void receiveInteraction(InteractionClassHandle interactionClassHandle, ParameterHandleValueMap parameterHandleValueMap, byte[] bytes, OrderType orderType, TransportationTypeHandle transportationTypeHandle, SupplementalReceiveInfo supplementalReceiveInfo) throws hla.rti1516e.exceptions.FederateInternalError {
+        this.receiveInteraction( interactionClassHandle,
+                parameterHandleValueMap,
+                bytes,
+                orderType,
+                transportationTypeHandle,
+                null,
+                orderType,
+                supplementalReceiveInfo );
+    }
+
+    @Override
+    public void receiveInteraction(InteractionClassHandle interactionClassHandle, ParameterHandleValueMap parameterHandleValueMap, byte[] bytes, OrderType orderType, TransportationTypeHandle transportationTypeHandle, hla.rti1516e.LogicalTime logicalTime, OrderType orderType1, SupplementalReceiveInfo supplementalReceiveInfo) throws hla.rti1516e.exceptions.FederateInternalError {
+        StringBuilder builder = new StringBuilder("Interaction Received:");
+        try {
+            if (interactionClassHandle.equals(wejscieDoPrzychodniHandle) ) {
+                int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaPrzychodniaHandle));
+                double godzina_wejscia = EncodingHelpers.decodeDouble(parameterHandleValueMap.get(MainFederate.godzinaWejsciaHandle));
+                builder.append("Przybyl pacjent nr " + id_pacjenta + " do Przychodni, time=" + godzina_wejscia);
+                MainFederateAmbassador.iloscPacjentowWRejestracji++;
+                MainFederateAmbassador.zakonczeniaCzas=godzina_wejscia;
+            } else if (interactionClassHandle.equals(wejscieDoLekarzaHandle)) {
+                int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaLekarzHandle));
+                double godzina_wejscia = EncodingHelpers.decodeDouble(parameterHandleValueMap.get(MainFederate.godzinaWejsciaDoLekarzaHandle));
+                builder.append("Przybyl pacjent nr " + id_pacjenta + " do Lekarza, time=" + godzina_wejscia);
+                MainFederateAmbassador.dostepniLekarze--;
+                MainFederateAmbassador.iloscPacjentowWPoczekalni--;
+                MainFederateAmbassador.zakonczeniaCzas=godzina_wejscia;
+            } else if (interactionClassHandle.equals(przeniesieniePacjentaHandle) && EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.miejsceKoncoweHandle))==1) {
+                int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaPrzeniesienieHandle));
+                builder.append("Przybyl pacjent nr " + id_pacjenta + " do Poczekalni");
+                MainFederateAmbassador.iloscPacjentowWRejestracji--;
+                MainFederateAmbassador.iloscPacjentowWPoczekalni++;
+                MainFederateAmbassador.zakonczeniaCzas=convertTime(logicalTime);
+            } else if (interactionClassHandle.equals(przeniesieniePacjentaHandle) && EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.miejsceKoncoweHandle)) == 3) {
+                int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaPrzeniesienieHandle));
+                builder.append("Pacjent nr " + id_pacjenta + " przeniesiony do Gabinetu ");
+                MainFederateAmbassador.dostepneGabinety--;
+                MainFederateAmbassador.dostepniLekarze++;
+                MainFederateAmbassador.zakonczeniaCzas=convertTime(logicalTime);
+            } else if (interactionClassHandle.equals(przeniesieniePacjentaHandle) && EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.miejsceKoncoweHandle)) == 4) {
+                int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaPrzeniesienieHandle));
+                builder.append("Przybyl pacjent nr " + id_pacjenta + " obsluzony przez lekarza");
+                MainFederateAmbassador.dostepniLekarze++;
+                MainFederateAmbassador.zakonczeniaCzas=convertTime(logicalTime);
+            } else if (interactionClassHandle.equals(przeniesieniePacjentaHandle) && EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.miejsceKoncoweHandle)) == 5) {
+                int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaPrzeniesienieHandle));
+                builder.append("Przybyl pacjent nr " + id_pacjenta + " obsluzony w Gabinecie");
+                MainFederateAmbassador.dostepneGabinety++;
+                MainFederateAmbassador.zakonczeniaCzas=convertTime(logicalTime);
+            }
+        }catch (Exception e){}
+
+
+        log(builder.toString());
+    }
+
+    @Override
+    public void receiveInteraction(InteractionClassHandle interactionClassHandle, ParameterHandleValueMap parameterHandleValueMap, byte[] bytes, OrderType orderType, TransportationTypeHandle transportationTypeHandle, hla.rti1516e.LogicalTime logicalTime, OrderType orderType1, MessageRetractionHandle messageRetractionHandle, SupplementalReceiveInfo supplementalReceiveInfo) throws hla.rti1516e.exceptions.FederateInternalError {
+        StringBuilder builder = new StringBuilder("Interaction Received:");
+       /* if (interactionClassHandle.equals(wejscieDoPrzychodniHandle) ) {
+            int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaPrzychodniaHandle));
+            double godzina_wejscia = EncodingHelpers.decodeDouble(parameterHandleValueMap.get(MainFederate.godzinaWejsciaHandle));
+            builder.append("Przybyl pacjent nr " + id_pacjenta + " do Przychodni, time=" + godzina_wejscia);
+            MainFederateAmbassador.iloscPacjentowWRejestracji++;
+            MainFederateAmbassador.zakonczeniaCzas=convertTime(logicalTime);
+        } else if (interactionClassHandle.equals(wejscieDoLekarzaHandle)) {
+            int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaLekarzHandle));
+            double godzina_wejscia = EncodingHelpers.decodeDouble(parameterHandleValueMap.get(MainFederate.godzinaWejsciaDoLekarzaHandle));
+            builder.append("Przybyl pacjent nr " + id_pacjenta + " do Lekarza, time=" + godzina_wejscia);
+            MainFederateAmbassador.dostepniLekarze--;
+            MainFederateAmbassador.iloscPacjentowWPoczekalni--;
+            MainFederateAmbassador.zakonczeniaCzas=convertTime(logicalTime);
+        } else if (interactionClassHandle.equals(przeniesieniePacjentaHandle) && EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.miejsceKoncoweHandle))==1) {
+            int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaPrzeniesienieHandle));
+            builder.append("Przybyl pacjent nr " + id_pacjenta + " do Poczekalni");
+            MainFederateAmbassador.iloscPacjentowWRejestracji--;
+            MainFederateAmbassador.iloscPacjentowWPoczekalni++;
+            MainFederateAmbassador.zakonczeniaCzas=convertTime(logicalTime);
+        } else if (interactionClassHandle.equals(przeniesieniePacjentaHandle) && EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.miejsceKoncoweHandle)) == 3) {
+            int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaPrzeniesienieHandle));
+            builder.append("Pacjent nr " + id_pacjenta + " przeniesiony do Gabinetu ");
+            MainFederateAmbassador.dostepneGabinety--;
+            MainFederateAmbassador.dostepniLekarze++;
+            MainFederateAmbassador.zakonczeniaCzas=convertTime(logicalTime);
+        } else if (interactionClassHandle.equals(przeniesieniePacjentaHandle) && EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.miejsceKoncoweHandle)) == 4) {
+            int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaPrzeniesienieHandle));
+            builder.append("Przybyl pacjent nr " + id_pacjenta + " obsluzony przez lekarza");
+            MainFederateAmbassador.dostepniLekarze++;
+            MainFederateAmbassador.zakonczeniaCzas=convertTime(logicalTime);
+        } else if (interactionClassHandle.equals(przeniesieniePacjentaHandle) && EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.miejsceKoncoweHandle)) == 5) {
+            int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaPrzeniesienieHandle));
+            builder.append("Przybyl pacjent nr " + id_pacjenta + " obsluzony w Gabinecie");
+            MainFederateAmbassador.dostepneGabinety++;
+            MainFederateAmbassador.zakonczeniaCzas=convertTime(logicalTime);
+        }*/
+
+        log(builder.toString());
+    }
+
+    @Override
+    public void removeObjectInstance(ObjectInstanceHandle objectInstanceHandle, byte[] bytes, OrderType orderType, SupplementalRemoveInfo supplementalRemoveInfo) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void removeObjectInstance(ObjectInstanceHandle objectInstanceHandle, byte[] bytes, OrderType orderType, hla.rti1516e.LogicalTime logicalTime, OrderType orderType1, SupplementalRemoveInfo supplementalRemoveInfo) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void removeObjectInstance(ObjectInstanceHandle objectInstanceHandle, byte[] bytes, OrderType orderType, hla.rti1516e.LogicalTime logicalTime, OrderType orderType1, MessageRetractionHandle messageRetractionHandle, SupplementalRemoveInfo supplementalRemoveInfo) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void attributesInScope(ObjectInstanceHandle objectInstanceHandle, hla.rti1516e.AttributeHandleSet attributeHandleSet) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void attributesOutOfScope(ObjectInstanceHandle objectInstanceHandle, hla.rti1516e.AttributeHandleSet attributeHandleSet) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void provideAttributeValueUpdate(ObjectInstanceHandle objectInstanceHandle, hla.rti1516e.AttributeHandleSet attributeHandleSet, byte[] bytes) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void turnUpdatesOnForObjectInstance(ObjectInstanceHandle objectInstanceHandle, hla.rti1516e.AttributeHandleSet attributeHandleSet) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void turnUpdatesOnForObjectInstance(ObjectInstanceHandle objectInstanceHandle, hla.rti1516e.AttributeHandleSet attributeHandleSet, String s) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void turnUpdatesOffForObjectInstance(ObjectInstanceHandle objectInstanceHandle, hla.rti1516e.AttributeHandleSet attributeHandleSet) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void confirmAttributeTransportationTypeChange(ObjectInstanceHandle objectInstanceHandle, hla.rti1516e.AttributeHandleSet attributeHandleSet, TransportationTypeHandle transportationTypeHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void reportAttributeTransportationType(ObjectInstanceHandle objectInstanceHandle, AttributeHandle attributeHandle, TransportationTypeHandle transportationTypeHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void confirmInteractionTransportationTypeChange(InteractionClassHandle interactionClassHandle, TransportationTypeHandle transportationTypeHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void reportInteractionTransportationType(FederateHandle federateHandle, InteractionClassHandle interactionClassHandle, TransportationTypeHandle transportationTypeHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void requestAttributeOwnershipAssumption(ObjectInstanceHandle objectInstanceHandle, hla.rti1516e.AttributeHandleSet attributeHandleSet, byte[] bytes) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void requestDivestitureConfirmation(ObjectInstanceHandle objectInstanceHandle, hla.rti1516e.AttributeHandleSet attributeHandleSet) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void attributeOwnershipAcquisitionNotification(ObjectInstanceHandle objectInstanceHandle, hla.rti1516e.AttributeHandleSet attributeHandleSet, byte[] bytes) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void attributeOwnershipUnavailable(ObjectInstanceHandle objectInstanceHandle, hla.rti1516e.AttributeHandleSet attributeHandleSet) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void requestAttributeOwnershipRelease(ObjectInstanceHandle objectInstanceHandle, hla.rti1516e.AttributeHandleSet attributeHandleSet, byte[] bytes) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void confirmAttributeOwnershipAcquisitionCancellation(ObjectInstanceHandle objectInstanceHandle, hla.rti1516e.AttributeHandleSet attributeHandleSet) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void informAttributeOwnership(ObjectInstanceHandle objectInstanceHandle, AttributeHandle attributeHandle, FederateHandle federateHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void attributeIsNotOwned(ObjectInstanceHandle objectInstanceHandle, AttributeHandle attributeHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void attributeIsOwnedByRTI(ObjectInstanceHandle objectInstanceHandle, AttributeHandle attributeHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+
+    @Override
+    public void timeRegulationEnabled(hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+        this.federateTime = ((HLAfloat64Time)logicalTime).getValue();
+        this.isRegulating = true;
+    }
+
+    @Override
+    public void timeConstrainedEnabled(hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+        this.federateTime = ((HLAfloat64Time)logicalTime).getValue();
+        this.isConstrained = true;
+    }
+
+    @Override
+    public void timeAdvanceGrant(hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+        this.federateTime = ((HLAfloat64Time)logicalTime).getValue();
+        this.isAdvancing = false;
+    }
+
+    @Override
+    public void requestRetraction(MessageRetractionHandle messageRetractionHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+
+    }
+   /* public void timeRegulationEnabled(LogicalTime theFederateTime) {
         this.federateTime = convertTime(theFederateTime);
         this.isRegulating = true;
     }
@@ -140,31 +446,10 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
     public void timeAdvanceGrant(LogicalTime theTime) {
         this.federateTime = convertTime(theTime);
         this.isAdvancing = false;
-    }
+    }*/
 
-    @Override
-    public void requestRetraction(EventRetractionHandle eventRetractionHandle) throws EventNotKnown, FederateInternalError {
 
-    }
-
-    public void discoverObjectInstance(int theObject, int theObjectClass, String objectName) {
-        /*log( "Discoverd Object: handle=" + theObject + ", classHandle=" +
-                theObjectClass + ", name=" + objectName );*/
-    }
-
-    @Override
-    public void reflectAttributeValues(int i, ReflectedAttributes reflectedAttributes, byte[] bytes) throws ObjectNotKnown, AttributeNotKnown, FederateOwnsAttributes, FederateInternalError {
-
-    }
-
-    public void reflectAttributeValues(int theObject, ReflectedAttributes theAttributes, byte[] tag, LogicalTime theTime, EventRetractionHandle retractionHandle) {
-    }
-
-    public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag) {
-        receiveInteraction(interactionClass, theInteraction, tag, null, null);
-    }
-
-    public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle) {
+  /*  public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle) {
         StringBuilder builder = new StringBuilder("Interaction Received:");
         try {
             if (interactionClass == wejscieDoPrzychodniHandle) {
@@ -209,83 +494,5 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements Fe
             throw new RuntimeException(e);
         }
         log(builder.toString());
-    }
-
-    public void removeObjectInstance(int theObject, byte[] userSuppliedTag) {
-        log("Object Removed: handle=" + theObject);
-    }
-
-    public void removeObjectInstance(int theObject, byte[] userSuppliedTag, LogicalTime theTime, EventRetractionHandle retractionHandle) {
-        log("Object Removed: handle=" + theObject);
-    }
-
-    @Override
-    public void attributesInScope(int i, AttributeHandleSet attributeHandleSet) throws ObjectNotKnown, AttributeNotKnown, FederateInternalError {
-
-    }
-
-    @Override
-    public void attributesOutOfScope(int i, AttributeHandleSet attributeHandleSet) throws ObjectNotKnown, AttributeNotKnown, FederateInternalError {
-
-    }
-
-    @Override
-    public void provideAttributeValueUpdate(int i, AttributeHandleSet attributeHandleSet) throws ObjectNotKnown, AttributeNotKnown, AttributeNotOwned, FederateInternalError {
-
-    }
-
-    @Override
-    public void turnUpdatesOnForObjectInstance(int i, AttributeHandleSet attributeHandleSet) throws ObjectNotKnown, AttributeNotOwned, FederateInternalError {
-
-    }
-
-    @Override
-    public void turnUpdatesOffForObjectInstance(int i, AttributeHandleSet attributeHandleSet) throws ObjectNotKnown, AttributeNotOwned, FederateInternalError {
-
-    }
-
-    @Override
-    public void requestAttributeOwnershipAssumption(int i, AttributeHandleSet attributeHandleSet, byte[] bytes) throws ObjectNotKnown, AttributeNotKnown, AttributeAlreadyOwned, AttributeNotPublished, FederateInternalError {
-
-    }
-
-    @Override
-    public void attributeOwnershipDivestitureNotification(int i, AttributeHandleSet attributeHandleSet) throws ObjectNotKnown, AttributeNotKnown, AttributeNotOwned, AttributeDivestitureWasNotRequested, FederateInternalError {
-
-    }
-
-    @Override
-    public void attributeOwnershipAcquisitionNotification(int i, AttributeHandleSet attributeHandleSet) throws ObjectNotKnown, AttributeNotKnown, AttributeAcquisitionWasNotRequested, AttributeAlreadyOwned, AttributeNotPublished, FederateInternalError {
-
-    }
-
-    @Override
-    public void attributeOwnershipUnavailable(int i, AttributeHandleSet attributeHandleSet) throws ObjectNotKnown, AttributeNotKnown, AttributeAlreadyOwned, AttributeAcquisitionWasNotRequested, FederateInternalError {
-
-    }
-
-    @Override
-    public void requestAttributeOwnershipRelease(int i, AttributeHandleSet attributeHandleSet, byte[] bytes) throws ObjectNotKnown, AttributeNotKnown, AttributeNotOwned, FederateInternalError {
-
-    }
-
-    @Override
-    public void confirmAttributeOwnershipAcquisitionCancellation(int i, AttributeHandleSet attributeHandleSet) throws ObjectNotKnown, AttributeNotKnown, AttributeAlreadyOwned, AttributeAcquisitionWasNotCanceled, FederateInternalError {
-
-    }
-
-    @Override
-    public void informAttributeOwnership(int i, int i1, int i2) throws ObjectNotKnown, AttributeNotKnown, FederateInternalError {
-
-    }
-
-    @Override
-    public void attributeIsNotOwned(int i, int i1) throws ObjectNotKnown, AttributeNotKnown, FederateInternalError {
-
-    }
-
-    @Override
-    public void attributeOwnedByRTI(int i, int i1) throws ObjectNotKnown, AttributeNotKnown, FederateInternalError {
-
-    }
+    }*/
 }
