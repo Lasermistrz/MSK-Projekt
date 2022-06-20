@@ -1,7 +1,5 @@
 package MSK.Lekarz;
 
-import MSK.Rejestracja.RejestracjaAmbassador;
-import hla.rti.jlc.EncodingHelpers;
 import hla.rti1516e.encoding.EncoderFactory;
 import hla.rti1516e.encoding.HLAinteger32BE;
 import hla.rti1516e.exceptions.FederationExecutionAlreadyExists;
@@ -11,8 +9,6 @@ import hla.rti1516e.time.HLAfloat64Interval;
 import hla.rti1516e.time.HLAfloat64Time;
 import hla.rti1516e.time.HLAfloat64TimeFactory;
 import hla.rti1516e.*;
-import org.portico.impl.hla13.types.DoubleTimeInterval;
-import org.portico.impl.hla1516e.types.time.DoubleTime;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -33,19 +33,9 @@ public class LekarzAmbassador implements FederateAmbassador {
         this.federate=fed;
     }
 
-    private double convertTime( LogicalTime logicalTime ) throws InvalidLogicalTime {
-        // PORTICO SPECIFIC!!
-        return DoubleTime.fromTime(logicalTime);
-    }
-
     private void log( String message )
     {
         System.out.println( "LekarzAmbassador : " + message );
-    }
-
-    public void synchronizationPointRegistrationFailed( String label )
-    {
-        log( "Failed to register sync point: " + label );
     }
 
     @Override
@@ -351,19 +341,19 @@ public class LekarzAmbassador implements FederateAmbassador {
     }
 
     @Override
-    public void timeRegulationEnabled(hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void timeRegulationEnabled(hla.rti1516e.LogicalTime logicalTime) throws FederateInternalError {
         this.federateTime = ((HLAfloat64Time)logicalTime).getValue();
         this.isRegulating = true;
     }
 
     @Override
-    public void timeConstrainedEnabled(hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void timeConstrainedEnabled(hla.rti1516e.LogicalTime logicalTime) throws FederateInternalError {
         this.federateTime = ((HLAfloat64Time)logicalTime).getValue();
         this.isConstrained = true;
     }
 
     @Override
-    public void timeAdvanceGrant(hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void timeAdvanceGrant(hla.rti1516e.LogicalTime logicalTime) throws FederateInternalError {
         this.federateTime = ((HLAfloat64Time)logicalTime).getValue();
         this.isAdvancing = false;
     }

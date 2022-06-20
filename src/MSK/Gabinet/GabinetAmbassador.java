@@ -3,9 +3,8 @@ package MSK.Gabinet;
 import MSK.GUI.MainFederate;
 import hla.rti.jlc.EncodingHelpers;
 import hla.rti1516e.*;
-import hla.rti1516e.exceptions.InvalidLogicalTime;
+import hla.rti1516e.exceptions.FederateInternalError;
 import hla.rti1516e.time.HLAfloat64Time;
-import org.portico.impl.hla1516e.types.time.DoubleTime;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -29,28 +28,20 @@ public class GabinetAmbassador implements hla.rti1516e.FederateAmbassador {
         this.federate=fed;
     }
 
-    private double convertTime( LogicalTime logicalTime ) throws InvalidLogicalTime {
-        // PORTICO SPECIFIC!!
-        return DoubleTime.fromTime(logicalTime);
-    }
 
     private void log( String message )
     {
         System.out.println( "GabinetAmbassador : " + message );
     }
 
-    public void synchronizationPointRegistrationFailed( String label )
-    {
-        log( "Failed to register sync point: " + label );
-    }
 
     @Override
-    public void connectionLost(String s) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void connectionLost(String s) throws FederateInternalError {
 
     }
 
     @Override
-    public void reportFederationExecutions(FederationExecutionInformationSet federationExecutionInformationSet) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void reportFederationExecutions(FederationExecutionInformationSet federationExecutionInformationSet) throws FederateInternalError {
 
     }
 
@@ -60,7 +51,7 @@ public class GabinetAmbassador implements hla.rti1516e.FederateAmbassador {
     }
 
     @Override
-    public void synchronizationPointRegistrationFailed(String s, SynchronizationPointFailureReason synchronizationPointFailureReason) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void synchronizationPointRegistrationFailed(String s, SynchronizationPointFailureReason synchronizationPointFailureReason) throws FederateInternalError {
 
     }
 
@@ -345,51 +336,36 @@ public class GabinetAmbassador implements hla.rti1516e.FederateAmbassador {
     }
 
     @Override
-    public void attributeIsNotOwned(ObjectInstanceHandle objectInstanceHandle, AttributeHandle attributeHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void attributeIsNotOwned(ObjectInstanceHandle objectInstanceHandle, AttributeHandle attributeHandle) throws FederateInternalError {
 
     }
 
     @Override
-    public void attributeIsOwnedByRTI(ObjectInstanceHandle objectInstanceHandle, AttributeHandle attributeHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void attributeIsOwnedByRTI(ObjectInstanceHandle objectInstanceHandle, AttributeHandle attributeHandle) throws FederateInternalError {
 
     }
 
     @Override
-    public void timeRegulationEnabled(hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void timeRegulationEnabled(hla.rti1516e.LogicalTime logicalTime) throws FederateInternalError {
         this.federateTime = ((HLAfloat64Time)logicalTime).getValue();
         this.isRegulating = true;
     }
 
     @Override
-    public void timeConstrainedEnabled(hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void timeConstrainedEnabled(hla.rti1516e.LogicalTime logicalTime) throws FederateInternalError {
         this.federateTime = ((HLAfloat64Time)logicalTime).getValue();
         this.isConstrained = true;
     }
 
     @Override
-    public void timeAdvanceGrant(hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void timeAdvanceGrant(hla.rti1516e.LogicalTime logicalTime) throws FederateInternalError {
         this.federateTime = ((HLAfloat64Time)logicalTime).getValue();
         this.isAdvancing = false;
     }
 
     @Override
-    public void requestRetraction(MessageRetractionHandle messageRetractionHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void requestRetraction(MessageRetractionHandle messageRetractionHandle) throws FederateInternalError {
 
     }
-   /* @Override
-    public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle) throws InteractionClassNotKnown, InteractionParameterNotKnown, InvalidFederationTime, FederateInternalError {
-
-        try {
-            if(interactionClass == przeniesieniePacjentaHlaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1))==3){
-                StringBuilder builder = new StringBuilder( "Interaction Received:" );
-                int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
-                GabinetAmbassador.lista.add(id_pacjenta);
-                builder.append("Dodano Pacjenta nr " + id_pacjenta + " do Gabinetu o godzinie " + theTime);
-                log( builder.toString() );
-            }
-        } catch (ArrayIndexOutOfBounds e) {
-            throw new RuntimeException(e);
-        }
-    }*/
 
 }

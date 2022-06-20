@@ -25,7 +25,6 @@ public class PacjentFederate {
 
     private RTIambassador rtiamb;
     private PacjentAmbassador fedamb;
-    private final double timeStep = 1.0;
     private HLAfloat64TimeFactory timeFactory; // set when we join
     protected EncoderFactory encoderFactory;     // set when we join
     protected static ObjectClassHandle pacjentHandle;
@@ -154,7 +153,6 @@ public class PacjentFederate {
 
         rtiamb.sendInteraction( wejscieHandle, parameters, "tag".getBytes(), time );
         log("Przybyl pacjent nr " + idstatic);
-        //log("Send interaction ");
         idstatic++;
     }
 

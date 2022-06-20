@@ -3,9 +3,7 @@ package MSK.Pacjent;
 import MSK.GUI.MainFederate;
 import hla.rti1516e.*;
 import hla.rti1516e.exceptions.FederateInternalError;
-import hla.rti1516e.exceptions.InvalidLogicalTime;
 import hla.rti1516e.time.HLAfloat64Time;
-import org.portico.impl.hla1516e.types.time.DoubleTime;
 
 import java.util.Set;
 
@@ -30,23 +28,15 @@ public class PacjentAmbassador implements hla.rti1516e.FederateAmbassador {
     public PacjentAmbassador(PacjentFederate fed){
         this.federate=fed;
     }
-    private double convertTime( LogicalTime logicalTime ) throws InvalidLogicalTime {
-        // PORTICO SPECIFIC!!
-        return DoubleTime.fromTime(logicalTime);
-    }
 
     private void log( String message )
     {
         System.out.println( "PacjentAmbassador: " + message );
     }
 
-    public void synchronizationPointRegistrationFailed( String label )
-    {
-        log( "Failed to register sync point: " + label );
-    }
 
     @Override
-    public void connectionLost(String s) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void connectionLost(String s) throws FederateInternalError {
 
     }
 
@@ -86,7 +76,7 @@ public class PacjentAmbassador implements hla.rti1516e.FederateAmbassador {
     }
 
     @Override
-    public void initiateFederateSave(String s, hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void initiateFederateSave(String s, hla.rti1516e.LogicalTime logicalTime) throws FederateInternalError {
 
     }
 
@@ -96,7 +86,7 @@ public class PacjentAmbassador implements hla.rti1516e.FederateAmbassador {
     }
 
     @Override
-    public void federationNotSaved(SaveFailureReason saveFailureReason) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void federationNotSaved(SaveFailureReason saveFailureReason) throws FederateInternalError {
 
     }
 
@@ -122,7 +112,7 @@ public class PacjentAmbassador implements hla.rti1516e.FederateAmbassador {
     }
 
     @Override
-    public void initiateFederateRestore(String s, String s1, FederateHandle federateHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void initiateFederateRestore(String s, String s1, FederateHandle federateHandle) throws FederateInternalError {
 
     }
 
@@ -262,12 +252,12 @@ public class PacjentAmbassador implements hla.rti1516e.FederateAmbassador {
     }
 
     @Override
-    public void turnUpdatesOffForObjectInstance(ObjectInstanceHandle objectInstanceHandle, hla.rti1516e.AttributeHandleSet attributeHandleSet) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void turnUpdatesOffForObjectInstance(ObjectInstanceHandle objectInstanceHandle, AttributeHandleSet attributeHandleSet) throws hla.rti1516e.exceptions.FederateInternalError {
 
     }
 
     @Override
-    public void confirmAttributeTransportationTypeChange(ObjectInstanceHandle objectInstanceHandle, hla.rti1516e.AttributeHandleSet attributeHandleSet, TransportationTypeHandle transportationTypeHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void confirmAttributeTransportationTypeChange(ObjectInstanceHandle objectInstanceHandle, AttributeHandleSet attributeHandleSet, TransportationTypeHandle transportationTypeHandle) throws hla.rti1516e.exceptions.FederateInternalError {
 
     }
 
@@ -322,12 +312,12 @@ public class PacjentAmbassador implements hla.rti1516e.FederateAmbassador {
     }
 
     @Override
-    public void attributeIsNotOwned(ObjectInstanceHandle objectInstanceHandle, AttributeHandle attributeHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void attributeIsNotOwned(ObjectInstanceHandle objectInstanceHandle, AttributeHandle attributeHandle) throws FederateInternalError {
 
     }
 
     @Override
-    public void attributeIsOwnedByRTI(ObjectInstanceHandle objectInstanceHandle, AttributeHandle attributeHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void attributeIsOwnedByRTI(ObjectInstanceHandle objectInstanceHandle, AttributeHandle attributeHandle) throws FederateInternalError {
 
     }
 
@@ -350,7 +340,7 @@ public class PacjentAmbassador implements hla.rti1516e.FederateAmbassador {
     }
 
     @Override
-    public void requestRetraction(MessageRetractionHandle messageRetractionHandle) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void requestRetraction(MessageRetractionHandle messageRetractionHandle) throws FederateInternalError {
 
     }
 

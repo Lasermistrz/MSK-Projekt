@@ -6,9 +6,6 @@ import hla.rti1516e.exceptions.*;
 import hla.rti1516e.time.HLAfloat64Interval;
 import hla.rti1516e.time.HLAfloat64Time;
 import hla.rti1516e.time.HLAfloat64TimeFactory;
-import hla.rti1516e.time.HLAinteger64Time;
-import org.portico.impl.hla13.types.DoubleTime;
-import org.portico.impl.hla13.types.DoubleTimeInterval;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,7 +73,7 @@ public class MainFederate {
             e.printStackTrace();
         }
     }
-    public void runFederate( String federateName ) throws RTIexception, hla.rti1516e.exceptions.RTIinternalError, CallNotAllowedFromWithinCallback, AlreadyConnected, InvalidLocalSettingsDesignator, ConnectionFailed, UnsupportedCallbackModel, MalformedURLException {
+    public void runFederate( String federateName ) throws RTIexception, RTIinternalError, CallNotAllowedFromWithinCallback, AlreadyConnected, InvalidLocalSettingsDesignator, ConnectionFailed, UnsupportedCallbackModel, MalformedURLException {
         frame = new JFrame();
         frame.setTitle("MSK");
         mainPanel = new JPanel();
@@ -211,21 +208,10 @@ public class MainFederate {
         publishAndSubscribe();
         log( "Published and Subscribed" );
 
-        /*int objectHandle = registerObject();
-        log( "Registered Object, handle=" + objectHandle );*/
 
         		for( int i = 0; i < ITERATIONS; i++ )
         //while(fedamb.running)
         {
-            // 9.1 update the attribute values of the instance //
-            //updateAttributeValues( objectHandle );
-
-            // 9.2 send an interaction
-            //sendInteraction();
-
-
-            // 9.3 request a time advance and wait until we get it
-            //double timeToAdvance = fedamb.federateTime + timeStep;
 
             advanceTime(timeStep);
             log( "Time Advanced to " + fedamb.federateTime );
@@ -248,9 +234,6 @@ public class MainFederate {
         log("Czas ilosc pacjentow w rejestracji = " + MainFederateAmbassador.iloscPacjentowWRejestracji);
         log("Czas ilosc pacjentow w poczekalni = " + MainFederateAmbassador.iloscPacjentowWPoczekalni);
 
-
-        /*deleteObject( objectHandle );
-        log( "Deleted Object, handle=" + objectHandle );*/
 
         rtiamb.resignFederationExecution( ResignAction.NO_ACTION );
         log( "Resigned from Federation" );
@@ -316,17 +299,6 @@ public class MainFederate {
         {
             rtiamb.evokeMultipleCallbacks( 0.1, 0.2 );
         }
-    }
-
-
-    private double getLbts()
-    {
-        return fedamb.federateTime + fedamb.federateLookahead;
-    }
-
-    private byte[] generateTag()
-    {
-        return (""+System.currentTimeMillis()).getBytes();
     }
 
     public static void main( String[] args )

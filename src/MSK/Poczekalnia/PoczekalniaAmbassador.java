@@ -1,7 +1,6 @@
 package MSK.Poczekalnia;
 
 import MSK.GUI.MainFederate;
-import MSK.Pacjent.PacjentFederate;
 import MSK.Parameters;
 
 import hla.rti.jlc.EncodingHelpers;
@@ -26,18 +25,12 @@ public class PoczekalniaAmbassador implements FederateAmbassador {
     protected boolean isAnnounced        = false;
     protected boolean isReadyToRun       = false;
     protected boolean running 			 = true;
-    protected int przeniesienieHlaHandle;
     public static int iloscWolnychLekarzy= Parameters.iloscLekarzy;
-    protected int wejscieDoLekarzaHlaHandle;
     public static ArrayList<Integer> lista = new ArrayList<>();
     protected InteractionClassHandle wejscieDoPrzychodniHandle;
     protected InteractionClassHandle przeniesieniePacjentaHandle;
     protected InteractionClassHandle wejscieDoLekarzaHandle;
 
-    private double convertTime( LogicalTime logicalTime ) throws InvalidLogicalTime {
-        // PORTICO SPECIFIC!!
-        return DoubleTime.fromTime(logicalTime);
-    }
 
     public PoczekalniaAmbassador(PoczekalniaFederate fed){
         this.federate = fed;
@@ -46,11 +39,6 @@ public class PoczekalniaAmbassador implements FederateAmbassador {
     private void log( String message )
     {
         System.out.println( "PoczekalniaAmbassador: " + message );
-    }
-
-    public void synchronizationPointRegistrationFailed( String label )
-    {
-        log( "Failed to register sync point: " + label );
     }
 
     @Override
@@ -361,19 +349,19 @@ public class PoczekalniaAmbassador implements FederateAmbassador {
     }
 
     @Override
-    public void timeRegulationEnabled(hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void timeRegulationEnabled(hla.rti1516e.LogicalTime logicalTime) throws FederateInternalError {
         this.federateTime = ((HLAfloat64Time)logicalTime).getValue();
         this.isRegulating = true;
     }
 
     @Override
-    public void timeConstrainedEnabled(hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void timeConstrainedEnabled(hla.rti1516e.LogicalTime logicalTime) throws FederateInternalError {
         this.federateTime = ((HLAfloat64Time)logicalTime).getValue();
         this.isConstrained = true;
     }
 
     @Override
-    public void timeAdvanceGrant(hla.rti1516e.LogicalTime logicalTime) throws hla.rti1516e.exceptions.FederateInternalError {
+    public void timeAdvanceGrant(hla.rti1516e.LogicalTime logicalTime) throws FederateInternalError {
         this.federateTime = ((HLAfloat64Time)logicalTime).getValue();
         this.isAdvancing = false;
     }

@@ -1,7 +1,6 @@
 package MSK.Statystyka;
 
 import MSK.GUI.MainFederate;
-import MSK.GUI.MainFederateAmbassador;
 import hla.rti1516e.*;
 import hla.rti.jlc.EncodingHelpers;
 import hla.rti1516e.exceptions.FederateInternalError;
@@ -40,11 +39,6 @@ public class StatystykaAmbassador implements FederateAmbassador{
     private void log( String message )
     {
         System.out.println( "StatystykaAmbassador : " + message );
-    }
-
-    public void synchronizationPointRegistrationFailed( String label )
-    {
-        log( "Failed to register sync point: " + label );
     }
 
     @Override

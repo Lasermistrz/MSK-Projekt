@@ -9,8 +9,6 @@ import hla.rti1516e.exceptions.RTIexception;
 import hla.rti1516e.time.HLAfloat64Interval;
 import hla.rti1516e.time.HLAfloat64Time;
 import hla.rti1516e.time.HLAfloat64TimeFactory;
-import org.portico.impl.hla13.types.DoubleTime;
-import org.portico.impl.hla13.types.DoubleTimeInterval;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -41,8 +39,6 @@ public class GabinetFederate {
         rtiamb.connect( fedamb, CallbackModel.HLA_EVOKED );
 
         log( "Creating Federation..." );
-        // We attempt to create a new federation with the first three of the
-        // restaurant FOM modules covering processes, food and drink
         try
         {
             URL[] modules = new URL[]{
@@ -74,15 +70,8 @@ public class GabinetFederate {
 
         log( "Joined Federation as " + federateName );
 
-        // cache the time factory for easy access
         this.timeFactory = (HLAfloat64TimeFactory)rtiamb.getTimeFactory();
 
-        ////////////////////////////////
-        // 5. announce the sync point //
-        ////////////////////////////////
-        // announce a sync point to get everyone on the same page. if the point
-        // has already been registered, we'll get a callback saying it failed,
-        // but we don't care about that, as long as someone registered it
         rtiamb.registerFederationSynchronizationPoint( READY_TO_RUN, null );
 
         while( fedamb.isAnnounced == false )
@@ -102,7 +91,6 @@ public class GabinetFederate {
         enableTimePolicy();
 
         publishAndSubscribe();
-
 
         while (fedamb.running) {
             advanceTime(3*randomTime());
@@ -171,8 +159,6 @@ public class GabinetFederate {
 
     private void advanceTime( double timestep ) throws RTIexception
     {
-        //log("requesting time advance for: " + timestep);
-
         fedamb.isAdvancing = true;
         HLAfloat64Time time = timeFactory.makeTime( fedamb.federateTime + timestep );
         rtiamb.timeAdvanceRequest( time );

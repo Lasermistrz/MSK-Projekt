@@ -48,9 +48,7 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements hl
         System.out.println("FederateAmbassador: " + message);
     }
 
-    public void synchronizationPointRegistrationFailed(String label) {
-        log("Failed to register sync point: " + label);
-    }
+
 
     @Override
     public void connectionLost(String s) throws hla.rti1516e.exceptions.FederateInternalError {
@@ -260,45 +258,7 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements hl
 
     @Override
     public void receiveInteraction(InteractionClassHandle interactionClassHandle, ParameterHandleValueMap parameterHandleValueMap, byte[] bytes, OrderType orderType, TransportationTypeHandle transportationTypeHandle, hla.rti1516e.LogicalTime logicalTime, OrderType orderType1, MessageRetractionHandle messageRetractionHandle, SupplementalReceiveInfo supplementalReceiveInfo) throws hla.rti1516e.exceptions.FederateInternalError {
-        StringBuilder builder = new StringBuilder("Interaction Received:");
-       /* if (interactionClassHandle.equals(wejscieDoPrzychodniHandle) ) {
-            int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaPrzychodniaHandle));
-            double godzina_wejscia = EncodingHelpers.decodeDouble(parameterHandleValueMap.get(MainFederate.godzinaWejsciaHandle));
-            builder.append("Przybyl pacjent nr " + id_pacjenta + " do Przychodni, time=" + godzina_wejscia);
-            MainFederateAmbassador.iloscPacjentowWRejestracji++;
-            MainFederateAmbassador.zakonczeniaCzas=convertTime(logicalTime);
-        } else if (interactionClassHandle.equals(wejscieDoLekarzaHandle)) {
-            int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaLekarzHandle));
-            double godzina_wejscia = EncodingHelpers.decodeDouble(parameterHandleValueMap.get(MainFederate.godzinaWejsciaDoLekarzaHandle));
-            builder.append("Przybyl pacjent nr " + id_pacjenta + " do Lekarza, time=" + godzina_wejscia);
-            MainFederateAmbassador.dostepniLekarze--;
-            MainFederateAmbassador.iloscPacjentowWPoczekalni--;
-            MainFederateAmbassador.zakonczeniaCzas=convertTime(logicalTime);
-        } else if (interactionClassHandle.equals(przeniesieniePacjentaHandle) && EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.miejsceKoncoweHandle))==1) {
-            int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaPrzeniesienieHandle));
-            builder.append("Przybyl pacjent nr " + id_pacjenta + " do Poczekalni");
-            MainFederateAmbassador.iloscPacjentowWRejestracji--;
-            MainFederateAmbassador.iloscPacjentowWPoczekalni++;
-            MainFederateAmbassador.zakonczeniaCzas=convertTime(logicalTime);
-        } else if (interactionClassHandle.equals(przeniesieniePacjentaHandle) && EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.miejsceKoncoweHandle)) == 3) {
-            int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaPrzeniesienieHandle));
-            builder.append("Pacjent nr " + id_pacjenta + " przeniesiony do Gabinetu ");
-            MainFederateAmbassador.dostepneGabinety--;
-            MainFederateAmbassador.dostepniLekarze++;
-            MainFederateAmbassador.zakonczeniaCzas=convertTime(logicalTime);
-        } else if (interactionClassHandle.equals(przeniesieniePacjentaHandle) && EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.miejsceKoncoweHandle)) == 4) {
-            int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaPrzeniesienieHandle));
-            builder.append("Przybyl pacjent nr " + id_pacjenta + " obsluzony przez lekarza");
-            MainFederateAmbassador.dostepniLekarze++;
-            MainFederateAmbassador.zakonczeniaCzas=convertTime(logicalTime);
-        } else if (interactionClassHandle.equals(przeniesieniePacjentaHandle) && EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.miejsceKoncoweHandle)) == 5) {
-            int id_pacjenta = EncodingHelpers.decodeInt(parameterHandleValueMap.get(MainFederate.idPacjentaPrzeniesienieHandle));
-            builder.append("Przybyl pacjent nr " + id_pacjenta + " obsluzony w Gabinecie");
-            MainFederateAmbassador.dostepneGabinety++;
-            MainFederateAmbassador.zakonczeniaCzas=convertTime(logicalTime);
-        }*/
 
-        log(builder.toString());
     }
 
     @Override
@@ -433,66 +393,4 @@ public class MainFederateAmbassador extends NullFederateAmbassador implements hl
     public void requestRetraction(MessageRetractionHandle messageRetractionHandle) throws hla.rti1516e.exceptions.FederateInternalError {
 
     }
-   /* public void timeRegulationEnabled(LogicalTime theFederateTime) {
-        this.federateTime = convertTime(theFederateTime);
-        this.isRegulating = true;
-    }
-
-    public void timeConstrainedEnabled(LogicalTime theFederateTime) {
-        this.federateTime = convertTime(theFederateTime);
-        this.isConstrained = true;
-    }
-
-    public void timeAdvanceGrant(LogicalTime theTime) {
-        this.federateTime = convertTime(theTime);
-        this.isAdvancing = false;
-    }*/
-
-
-  /*  public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle) {
-        StringBuilder builder = new StringBuilder("Interaction Received:");
-        try {
-            if (interactionClass == wejscieDoPrzychodniHandle) {
-                int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
-                double godzina_wejscia = EncodingHelpers.decodeDouble(theInteraction.getValue(1));
-                builder.append("Przybyl pacjent nr " + id_pacjenta + " do Przychodni, time=" + godzina_wejscia);
-                MainFederateAmbassador.iloscPacjentowWRejestracji++;
-                MainFederateAmbassador.zakonczeniaCzas=convertTime(theTime);
-            } else if (interactionClass == wejscieDoLekarzaHandle) {
-                int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
-                double godzina_wejscia = EncodingHelpers.decodeDouble(theInteraction.getValue(1));
-                builder.append("Przybyl pacjent nr " + id_pacjenta + " do Lekarza, time=" + godzina_wejscia);
-                MainFederateAmbassador.dostepniLekarze--;
-                MainFederateAmbassador.iloscPacjentowWPoczekalni--;
-                MainFederateAmbassador.zakonczeniaCzas=convertTime(theTime);
-            } else if (interactionClass == przeniesieniePacjentaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1)) == 1) {
-                int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
-                builder.append("Przybyl pacjent nr " + id_pacjenta + " do Poczekalni");
-                MainFederateAmbassador.iloscPacjentowWRejestracji--;
-                MainFederateAmbassador.iloscPacjentowWPoczekalni++;
-                MainFederateAmbassador.zakonczeniaCzas=convertTime(theTime);
-            } else if (interactionClass == przeniesieniePacjentaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1)) == 3) {
-                int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
-                builder.append("Pacjent nr " + id_pacjenta + " przeniesiony do Gabinetu ");
-                MainFederateAmbassador.dostepneGabinety--;
-                MainFederateAmbassador.dostepniLekarze++;
-                MainFederateAmbassador.zakonczeniaCzas=convertTime(theTime);
-            } else if (interactionClass == przeniesieniePacjentaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1)) == 4) {
-                int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
-                builder.append("Przybyl pacjent nr " + id_pacjenta + " obsluzony przez lekarza");
-                MainFederateAmbassador.dostepniLekarze++;
-                MainFederateAmbassador.zakonczeniaCzas=convertTime(theTime);
-            } else if (interactionClass == przeniesieniePacjentaHandle && EncodingHelpers.decodeInt(theInteraction.getValue(1)) == 5) {
-                int id_pacjenta = EncodingHelpers.decodeInt(theInteraction.getValue(0));
-                builder.append("Przybyl pacjent nr " + id_pacjenta + " obsluzony w Gabinecie");
-                MainFederateAmbassador.dostepneGabinety++;
-                MainFederateAmbassador.zakonczeniaCzas=convertTime(theTime);
-            }
-
-
-        } catch (ArrayIndexOutOfBounds e) {
-            throw new RuntimeException(e);
-        }
-        log(builder.toString());
-    }*/
 }

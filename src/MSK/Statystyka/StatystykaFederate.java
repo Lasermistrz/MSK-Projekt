@@ -103,7 +103,6 @@ public class StatystykaFederate {
 
 
         //while (fedamb.running)
-        //
         for( int i = 0; i < ITERATIONS; i++ )
         {
             advanceTime(timeStep);
@@ -115,6 +114,7 @@ public class StatystykaFederate {
         log("Sredni czas w rejestracji " + StatystykaAmbassador.listaPacjentow.GetAverageTimeInRegistration());
         log("Sredni czas w gabinecie " + StatystykaAmbassador.listaPacjentow.GetAverageTimeInConsultingRoom());
         log("Wyjscie ostatniego pacjenta " + StatystykaAmbassador.listaPacjentow.GetTimeLastPatient());
+        log("Wyjscie ostatniego pacjenta " + (StatystykaAmbassador.listaPacjentow.GetTimeLastPatient()-480.0) + " po zamknięciu rejestracji w przychodni");
 
     }
 
@@ -183,11 +183,6 @@ public class StatystykaFederate {
         {
             rtiamb.evokeMultipleCallbacks( 0.1, 0.2 );
         }
-    }
-
-    private double randomTime() {
-        Random r = new Random();
-        return 1 +(4 * r.nextDouble());
     }
     private void log( String message )
     {

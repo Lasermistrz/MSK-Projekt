@@ -23,7 +23,6 @@ public class PoczekalniaFederate {
     protected EncoderFactory encoderFactory;     // set when we join
     private RTIambassador rtiamb;
     private PoczekalniaAmbassador fedamb;
-    private final double timeStep = 1.0;
     protected static InteractionClassHandle przeniesieniePacjentaHandle;
     protected static ParameterHandle idPacjentaPrzeniesienieHandle;
     protected static ParameterHandle miejsceKoncoweHandle;
