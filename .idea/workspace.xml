@@ -7,20 +7,8 @@
     <list default="true" id="d909859d-a9b8-483a-a0d4-fd471959c748" name="Changes" comment="Pacjent wysyła Czy_otwarte do Głównego federata (jako nauka komunikacji)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/portico.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/portico.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/GUI/MainFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/GUI/MainFederate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/GUI/MainFederateAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/GUI/MainFederateAmbassador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/Gabinet/GabinetAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Gabinet/GabinetAmbassador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/Gabinet/GabinetFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Gabinet/GabinetFederate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/Lekarz/LekarzAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Lekarz/LekarzAmbassador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/Lekarz/LekarzFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Lekarz/LekarzFederate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentAmbassador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Pacjent/PacjentFederate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/Poczekalnia/PoczekalniaAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Poczekalnia/PoczekalniaAmbassador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/Poczekalnia/PoczekalniaFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Poczekalnia/PoczekalniaFederate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaAmbassador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Parameters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Parameters.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaFederate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/Statystyka/StatystykaAmbassador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Statystyka/StatystykaAmbassador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/Statystyka/StatystykaFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Statystyka/StatystykaFederate.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -200,6 +188,7 @@
       <workItem from="1655649969462" duration="3068000" />
       <workItem from="1655676770684" duration="24000" />
       <workItem from="1655718905227" duration="1431000" />
+      <workItem from="1655802339784" duration="345000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <created>1654434945314</created>

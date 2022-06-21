@@ -107,7 +107,6 @@ public class RejestracjaFederate {
             advanceTime(randomTime());
 
             if (iloscWolnychMiejscWPoczekalni > 0 && RejestracjaAmbassador.lista.size() > 0 && fedamb.federateTime<480) {
-                log(RejestracjaAmbassador.lista.get(0) + " pacjent");
                 sendInteraction(RejestracjaAmbassador.lista.get(0));
                 RejestracjaAmbassador.lista.remove(0);
                 iloscWolnychMiejscWPoczekalni--;
