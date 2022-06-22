@@ -21,7 +21,6 @@ import java.util.Random;
 
 public class RejestracjaFederate {
     public static final String READY_TO_RUN = "ReadyToRun";
-    protected int rejestracjaHlaHandle;
     private RTIambassador rtiamb;
     private RejestracjaAmbassador fedamb;
     private HLAfloat64TimeFactory timeFactory; // set when we join

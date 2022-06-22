@@ -1,6 +1,5 @@
 package MSK.Statystyka;
 
-import MSK.Pacjent.PacjentAmbassador;
 import hla.rti1516e.*;
 import hla.rti1516e.RtiFactoryFactory;
 import hla.rti1516e.encoding.EncoderFactory;
@@ -10,15 +9,12 @@ import hla.rti1516e.exceptions.RTIinternalError;
 import hla.rti1516e.time.HLAfloat64Interval;
 import hla.rti1516e.time.HLAfloat64Time;
 import hla.rti1516e.time.HLAfloat64TimeFactory;
-import org.portico.impl.hla13.types.DoubleTime;
-import org.portico.impl.hla13.types.DoubleTimeInterval;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Random;
 
 public class StatystykaFederate {
     public static final String READY_TO_RUN = "ReadyToRun";

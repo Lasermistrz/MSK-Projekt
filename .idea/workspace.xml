@@ -7,8 +7,8 @@
     <list default="true" id="d909859d-a9b8-483a-a0d4-fd471959c748" name="Changes" comment="Pacjent wysyła Czy_otwarte do Głównego federata (jako nauka komunikacji)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/portico.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/portico.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MSK/Parameters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Parameters.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Rejestracja/RejestracjaFederate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MSK/Statystyka/StatystykaFederate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MSK/Statystyka/StatystykaFederate.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,6 +70,19 @@
     </key>
   </component>
   <component name="RunManager" selected="Application.MainFederate">
+    <configuration name="GabinetFederate" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="MSK.Gabinet.GabinetFederate" />
+      <module name="MSK-Projekt" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="MSK.Gabinet.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="LekarzFederate" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MSK.Lekarz.LekarzFederate" />
       <module name="MSK-Projekt" />
@@ -129,26 +142,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StatystykaFederate" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="MSK.Statystyka.StatystykaFederate" />
-      <module name="MSK-Projekt" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="MSK.Statystyka.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.StatystykaFederate" />
-        <item itemvalue="Application.RejestracjaFederate" />
-        <item itemvalue="Application.PoczekalniaFederate" />
-        <item itemvalue="Application.PacjentFederate" />
+        <item itemvalue="Application.GabinetFederate" />
         <item itemvalue="Application.LekarzFederate" />
+        <item itemvalue="Application.PacjentFederate" />
+        <item itemvalue="Application.PoczekalniaFederate" />
+        <item itemvalue="Application.RejestracjaFederate" />
       </list>
     </recent_temporary>
   </component>
@@ -188,7 +188,10 @@
       <workItem from="1655649969462" duration="3068000" />
       <workItem from="1655676770684" duration="24000" />
       <workItem from="1655718905227" duration="1431000" />
-      <workItem from="1655802339784" duration="345000" />
+      <workItem from="1655802339784" duration="378000" />
+      <workItem from="1655805929401" duration="274000" />
+      <workItem from="1655885126828" duration="1050000" />
+      <workItem from="1655910137519" duration="2503000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <created>1654434945314</created>
